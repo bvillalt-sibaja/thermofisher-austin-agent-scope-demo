@@ -30,51 +30,113 @@ import subprocess
 import sys
 
 
-def _resolve_tcl_tk_library():
-    """Points TCL_LIBRARY/TK_LIBRARY at a real, working Tcl/Tk install
-    before `import tkinter` ever touches the interpreter's Tcl runtime.
+import tkinter as tk
+
+
+def _tcl_tk_candidates(vendor_dir):
+    """Yields (tcl_dir, tk_dir) pairs to try, in order. `tk_dir` may be
+    None if no matching Tk library was found alongside a given Tcl one.
 
     Needed specifically for Maker Player's embedded Python runtime:
-    confirmed live, it ships the `tkinter`/`_tkinter` C extension but NOT
-    Tcl's own script library alongside it, so the very first `tk.Tk()`
-    fails with `TclError: Can't find a usable init.tcl` before any of this
-    project's own code runs. This is a different, more severe failure than
-    the already-documented "macOS system Tcl/Tk 8.5 renders blank
-    windows" gotcha (see the `rpa` plugin's Bot Progress window template)
-    -- there, Tk actually initializes; here it can't initialize at all.
-    Since Tcl's script library isn't something pip can install, the fix is
-    pointing at a complete Tcl/Tk already present elsewhere on the same
-    machine, not changing interpreters or installing packages.
+    confirmed live (two real upload-and-run attempts), it ships the
+    `tkinter`/`_tkinter` C extension but not a matching Tcl/Tk script
+    library. Two distinct failures were hit in sequence:
+    1. No TCL_LIBRARY configured at all -> `Can't find a usable init.tcl`
+       (Tk can't initialize whatsoever -- different and more severe than
+       the already-documented "macOS system Tcl/Tk 8.5 renders blank
+       windows" gotcha in the `rpa` plugin's Bot Progress window template,
+       where Tk at least initializes).
+    2. Pointed at a real but WRONG-VERSION Tcl/Tk (Homebrew 8.6.18) ->
+       still `Can't find a usable init.tcl`, this time because a stock
+       `init.tcl` does `package require -exact Tcl 8.6.12` and refuses
+       any other 8.6.x point release. Maker Player's compiled `_tkinter`
+       needs exactly 8.6.12, confirmed from its own error output.
+    Neither is fixable with `pip install` -- Tcl's script library isn't a
+    Python package. `vendor/tcl8.6` + `vendor/tk8.6` (this same directory)
+    are a vendored, license-included copy of the exact 8.6.12 release
+    (https://github.com/tcltk/tcl and .../tk, tag core-8-6-12) pulled in
+    specifically as a guaranteed-version-matched fallback, since nothing
+    here can otherwise guarantee that exact point release exists on
+    whatever machine actually runs this.
 
-    Respects an already-valid TCL_LIBRARY (does nothing if it's already
-    set to a directory containing init.tcl) -- this only fills the gap
-    when the running interpreter has none configured. Ordered so a modern
-    Homebrew/python.org Tcl/Tk 8.6+ wins over macOS's own ancient bundled
-    8.5 if both are present (8.5 avoids the crash but is already confirmed
-    elsewhere to render zero widget content)."""
+    Ordered so anything already configured, then a modern system-installed
+    Tcl/Tk, gets tried before the vendored exact-match fallback -- a local
+    `robot` run on a machine with its own working Tcl/Tk (this dev Mac's
+    rpa-env uses Homebrew 8.6.x) should never need the vendored copy at
+    all. Ancient macOS system Tcl 8.5 is included last (initializes but
+    renders zero widget content, confirmed elsewhere) -- better than a
+    hard crash if every other candidate fails."""
+    seen = set()
+
+    def dedup(tcl_dir):
+        if tcl_dir in seen or not os.path.isfile(os.path.join(tcl_dir, "init.tcl")):
+            return None
+        seen.add(tcl_dir)
+        tk_dir = tcl_dir.replace("tcl8.", "tk8.").replace("Tcl.framework", "Tk.framework")
+        return (tcl_dir, tk_dir if os.path.isdir(tk_dir) else None)
+
     existing = os.environ.get("TCL_LIBRARY")
-    if existing and os.path.isfile(os.path.join(existing, "init.tcl")):
-        return
-    candidates = (
+    if existing:
+        c = dedup(existing)
+        if c:
+            yield c
+
+    for tcl_dir in (
         glob.glob("/opt/homebrew/opt/tcl-tk/lib/tcl8.*") +
         glob.glob("/opt/homebrew/Cellar/tcl-tk*/*/lib/tcl8.*") +
         glob.glob("/usr/local/opt/tcl-tk/lib/tcl8.*") +
         glob.glob("/usr/local/Cellar/tcl-tk*/*/lib/tcl8.*") +
-        glob.glob("/Library/Frameworks/Python.framework/Versions/3.*/lib/tcl8.*") +
-        glob.glob("/System/Library/Frameworks/Tcl.framework/Versions/*/Resources/Scripts")
-    )
-    for tcl_dir in candidates:
-        if os.path.isfile(os.path.join(tcl_dir, "init.tcl")):
-            os.environ["TCL_LIBRARY"] = tcl_dir
-            tk_dir = tcl_dir.replace("tcl8.", "tk8.").replace(
-                "Tcl.framework", "Tk.framework")
-            if os.path.isdir(tk_dir):
-                os.environ["TK_LIBRARY"] = tk_dir
-            return
+        glob.glob("/Library/Frameworks/Python.framework/Versions/3.*/lib/tcl8.*")
+    ):
+        c = dedup(tcl_dir)
+        if c:
+            yield c
+
+    c = dedup(os.path.join(vendor_dir, "tcl8.6"))
+    if c:
+        yield c
+
+    for tcl_dir in glob.glob("/System/Library/Frameworks/Tcl.framework/Versions/*/Resources/Scripts"):
+        c = dedup(tcl_dir)
+        if c:
+            yield c
 
 
-_resolve_tcl_tk_library()
-import tkinter as tk  # noqa: E402 -- must follow _resolve_tcl_tk_library()
+def _create_tk_root(vendor_dir):
+    """Tries each Tcl/Tk candidate in order, actually attempting a real
+    `tk.Tk()` for each one (not just checking a file exists) until one
+    works, returning the first successful root.
+
+    Retries IN-PROCESS rather than via a subprocess probe -- confirmed
+    empirically safe (a failed/version-mismatched `tk.Tk()` attempt does
+    not corrupt the process for a later successful one, tested against
+    both a nonexistent path and a deliberately version-mismatched
+    init.tcl). Deliberately does NOT spawn a subprocess to validate a
+    candidate first: this project's own Bot Progress window template
+    already documents, from a real reverted attempt, that re-invoking
+    `sys.executable` under Maker Player's embedded runner can kill the
+    entire execution ("Execution cancelled or timed out; embedded Python
+    runtime was terminated") -- not a safe technique to reuse here, and a
+    probe run under some OTHER interpreter wouldn't actually validate
+    compatibility with THIS process's own compiled `_tkinter` anyway."""
+    last_error = None
+    for tcl_dir, tk_dir in _tcl_tk_candidates(vendor_dir):
+        os.environ["TCL_LIBRARY"] = tcl_dir
+        if tk_dir:
+            os.environ["TK_LIBRARY"] = tk_dir
+        elif "TK_LIBRARY" in os.environ:
+            del os.environ["TK_LIBRARY"]
+        try:
+            return tk.Tk()
+        except tk.TclError as e:
+            last_error = e
+            continue
+    # Every candidate failed (or none were found) -- fall through to
+    # whatever's compiled-in/already configured, so a genuine remaining
+    # problem surfaces as its own real error rather than being masked.
+    if last_error:
+        raise last_error
+    return tk.Tk()
 
 DEMO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SEED_DIR = os.path.join(DEMO_ROOT, "seed-files")
@@ -147,7 +209,7 @@ class Orchestrator:
         sap_popups.confirm_dialog = _auto_confirm
         sap_screens.confirm_dialog = _auto_confirm
 
-        self.root = tk.Tk()  # this IS the primary SAP window
+        self.root = _create_tk_root(os.path.join(AUTOMATION_DIR, "vendor"))  # this IS the primary SAP window
         self.root.title("SAP Easy Access - Session 1")
         if not visible:
             self.root.withdraw()
