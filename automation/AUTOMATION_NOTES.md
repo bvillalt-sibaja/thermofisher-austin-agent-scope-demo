@@ -1,7 +1,27 @@
 # Thermo Fisher Austin "Agent Scope" demo automation
 
-Launch: `~/rpa-env/bin/python3 -m robot thermofisher_demo.robot`
-(or directly: `python3 orchestrator.py [--pace 0.15] [--headless] [--keep-open]`)
+Two entry-point files, for two different execution contexts:
+- **`thermofisher_demo.robot`** -- local iteration on this Mac. Imports the
+  sibling Python modules directly (static `Library ThermoFisherDemoLib.py`),
+  no network dependency. Launch: `~/rpa-env/bin/python3 -m robot thermofisher_demo.robot`
+  (or directly: `python3 orchestrator.py [--pace 0.15] [--headless] [--keep-open]`).
+- **`thermofisher_demo.player.robot`** -- the Maker Player upload target.
+  Maker Player only takes this one file, not its siblings, so this version
+  clones the full dependency tree from the public GitHub repo
+  (https://github.com/bvillalt-sibaja/thermofisher-austin-agent-scope-demo)
+  into `${OUTPUT_DIR}` at run time and dynamically `Import Library`s the
+  freshly-cloned `ThermoFisherDemoLib.py` (a static Settings-table `Library`
+  line can't reference a not-yet-cloned path -- it's parsed before any task
+  code runs). **Verified locally** with a real (non-`--dryrun`) `robot` run
+  of this exact file -- the clone and dynamic import genuinely worked,
+  production orders/Teams/JDE/Word all came back correct. **NOT yet verified
+  via an actual Maker Player upload-and-run** -- two real risks a local run
+  can't catch: Maker Player's embedded Python runtime may not have
+  `openpyxl`/`Pillow`/`python-docx` installed (all three are required by the
+  mirror apps, no provisioning step guarantees them), and `git` must be on
+  whatever machine's PATH actually runs it. Budget for one real
+  upload-and-run cycle before calling this done for that target, per this
+  skill's own standing rule.
 
 Replays the recorded process (`../recorded_steps.json`, 309 steps) against
 all 6 mirror apps -- `../sap-mirror`, `../teams-mirror`, `../jde-mirror`,
