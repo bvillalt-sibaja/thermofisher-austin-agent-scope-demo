@@ -1,0 +1,33 @@
+{
+  "teams": [
+    {
+      "name": "General",
+      "channels": ["General", "Announcements"],
+      "files": ["Production Tracker 2026.xlsx", "Shift Handoff Notes.docx"]
+    },
+    {
+      "name": "CSAB",
+      "channels": ["CSAB", "Escalations"],
+      "files": ["Customer Service Alert Board 2026.xlsx"]
+    },
+    {
+      "name": "Metrics Carpet",
+      "channels": ["Safety Stock Metric", "General"],
+      "files": ["V2 Trending Safety Stock Metric GSD & BID.xlsx"]
+    }
+  ],
+  "contacts": [
+    {"name": "Dominguez, Analisa", "title": "Customer Service"},
+    {"name": "Warner, Mike", "title": "Production Planner"}
+  ],
+  "chat_thread": [
+    {"sender": "Dominguez, Analisa", "mine": false, "text": "Hey, can you check on SKU A42362? Need current stock/batch status."},
+    {"sender": "me", "mine": true, "text": "On it, pulling it up in SAP now."},
+    {"sender": "Warner, Mike", "mine": false, "text": "SKU is A42362, lot info should be in stock overview."}
+  ],
+  "pending_sku": "A42362",
+  "second_sku": "A35989C",
+  "outgoing_message_1": "Hi ⁠Dominguez, Analisa⁠⁠⁠⁠⁠⁠⁠, warner mentioned that we were able to locate 5.1 L of this lot? Is that correct? ",
+  "outgoing_message_2": "Hi ⁠Dominguez, Analisa, warner mentioned that we were able to locate 5.1 L of this lot? Is that correct? These are beads that got date extended ",
+  "canned_reply": "Yes, that's correct - 5.1 L confirmed, thanks for checking!"
+}

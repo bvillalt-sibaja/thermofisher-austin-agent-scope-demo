@@ -1,0 +1,16 @@
+SIDEBAR_BG = "#2D2C4E"
+SIDEBAR_FG = "#FFFFFF"
+SIDEBAR_ACTIVE = "#5b5c99"
+SIDEBAR_ACTIVE_LIGHT = "#E8E8F5"
+CONTENT_BG = "#FFFFFF"
+PANEL_BG = "#F5F5F5"
+BORDER = "#E1E1E1"
+ACCENT = "#6264A7"
+TEXT = "#252423"
+TEXT_MUTED = "#605E5C"
+FONT_FAMILY = "Segoe UI"
+FALLBACK_FONT = "Helvetica"
+
+
+def font(size=10, weight="normal"):
+    return (FONT_FAMILY, size, weight)

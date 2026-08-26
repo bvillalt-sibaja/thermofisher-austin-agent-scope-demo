@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+automation/output.xml
+automation/log.html
+automation/report.html
+automation/bot_progress_state.json
+teams-mirror/state/session_state.json
+shared_state/latest_snip.png
+shared_state/latest_snip.json
+.DS_Store

@@ -1,0 +1,32 @@
+# JDE PROD & Snipping Tool mirrors
+
+## JD Edwards EnterpriseOne (JDE PROD) mirror
+- Path: `~/thermofisher-austin-demo/jde-mirror/main.py` — launch with `python3 main.py`.
+- Mirrors the 3 recorded steps: write P/N#/item number into the Find field (real recording used Ctrl+Alt+I over a web JDE client at `e1lsgpd.amer.thermo.com/jde/E1Menu.maf`), press Find, read the findings panel.
+- Functional: item search against `data/items.json` (seeded with `A42362` — bead/filtration lot referenced right before this JDE lookup in the recording — and `A35989C`, the later SKU). Ctrl+Alt+I is bound on the entry field; the Find button does the same thing. Not-found path shows "No item found matching '<x>'".
+- Decorative: the top address bar is a read-only Entry pre-filled with the real recorded JDE URL, for visual fidelity only — it does not navigate anywhere. The nav bar (Fast Path / My Work / Favorites / Address Book / Inventory Management) is also decorative — clicking a tab just re-colors it, Item Master Search is the only live tab.
+- Add more items by extending `data/items.json` (item_number, description, uom, status, branch_plant, on_hand_qty, lot_status).
+
+**Visual pass (2026-08-26):** restyled to look like real JD Edwards EnterpriseOne web-client chrome — dark corporate-blue (`#003057`) header, a nav-tab strip under it, boxy bordered form fields, and the findings panel rebuilt as a real `ttk.Treeview` two-column (Field/Value) grid with a blue heading row and alternating row shading, replacing the earlier plain `Text` dump. **Automation contract unchanged**: `item_entry` (Entry, `.delete`/`.insert`), `find()`, `result` (dict or `None`) are the same attributes/methods `orchestrator.py` calls — nothing about how the automation drives this app changed, only how it looks. `self.findings` (the old Text widget) no longer exists; nothing in the automation referenced it.
+
+## Windows Snipping Tool mirror
+- Path: `~/thermofisher-austin-demo/snipping-tool-mirror/main.py` — launch with `python3 main.py`.
+- Mirrors: open tool (auto-captures on launch), Shapes/Highlighter toolbar toggle, draw on canvas, Save/Send handoff.
+- "New Snip" does NOT use macOS `screencapture` — that CLI has hung indefinitely in this sandbox before (see `project_sap_ecc_mirror_demo` memory). Instead it renders a synthetic "Stock Overview (SAP)" screenshot via PIL (`render_stock_overview_placeholder`), visually equivalent for demo purposes.
+- Shapes tool draws a red rectangle by drag; Highlighter draws a semi-transparent yellow stroke by drag. Both are live on a Tkinter Canvas.
+- **Handoff contract to the Teams mirror**: "Save / Send to Teams" writes:
+  - `~/thermofisher-austin-demo/shared_state/latest_snip.png` — now the **fully rasterized** image, annotations baked in (see fix below)
+  - `~/thermofisher-austin-demo/shared_state/latest_snip.json` — `{"timestamp": ISO8601, "source": "Stock Overview - SAP", "annotated": <bool, true iff at least one shape was drawn this session>}`
+  - The Teams mirror should poll/read `latest_snip.json`'s `timestamp` to know a new snip is available and attach `latest_snip.png` to the active chat.
+
+**Visual pass (2026-08-26):** restyled to look like the modern Windows 11 Snipping Tool — light theme, a rounded icon toolbar (New/Rectangular/Freeform/Window/Fullscreen capture-mode buttons, a separator, Shapes/Highlighter annotation buttons, Share/Copy/Save icon buttons) with hand-drawn `PIL`-rendered icons (not Unicode emoji — same rationale as `~/sap-ecc-demo/sap_app/icons.py`: avoids OS/font-dependent tofu glyphs), and a thin-bordered canvas frame. Only New Snip / capture-mode selection / Shapes / Highlighter / Save-Copy-Share are functional; Freeform/Window/Fullscreen capture modes are decorative (recorded process never uses them). **Automation contract unchanged**: `new_snip()`, `set_mode(mode)`, `save_and_handoff()` — same signatures `orchestrator.py` calls.
+
+**Annotation-baking fix:** previously `save_and_handoff` just re-saved `self.base_image` untouched — every drawn shape/highlighter mark was visual-only on the Tk canvas and silently dropped from the PNG Teams received. Now `on_release` appends each completed stroke to `self.shapes` (mode + start/end coords, canvas space == image space 1:1 since the image is drawn at (0,0) with no scaling), and `save_and_handoff` calls a new `_rasterize_shapes()` that composites them onto a copy of the base image with `PIL.ImageDraw`/`Image.alpha_composite` — opaque red rectangle outline (width 3) for "shapes", semi-transparent yellow line (width 14, alpha ~130/255) for "highlighter" — matching the canvas's own colors/widths. Verified with a real pixel check: drew a rectangle from (50,50)-(150,100), confirmed the pixel at (100,50) changed from `(240,240,240)` (base gray) to `(255,0,0)` (opaque red) in the saved PNG. `shapes` resets on every `new_snip()`.
+
+## Verification performed
+- Headless: instantiated both apps (`withdraw()`, no mainloop). JDE: drove `find()` for both seeded materials and a not-found case, asserted `result`/grid rows. Snipping Tool: simulated a drag (`on_press`/`on_drag`/`on_release` with fake event objects) drawing a "shapes" rectangle, called `save_and_handoff()`, asserted the saved PNG's pixel at the rectangle edge actually changed to red and `latest_snip.json`'s `annotated` flag is `true`. Both passed, including a second run using the exact `sys.path`/dynamic-import pattern `orchestrator.py` itself uses (`importlib.util.spec_from_file_location`, `Toplevel(shared_root)`), confirming the integration contract, not just the standalone app, still works.
+- Real launch: `python3 main.py &` for each, confirmed the process starts and stays alive with no stderr output, then killed. Still did not confirm on-screen rendering visually (`osascript`/System Events lacks assistive-access permission in this sandbox) — a live-eyeball check on the actual demo machine is still recommended before calling this "seen running" per the skill's own bar; this is a pre-existing gap, not introduced by this pass.
+
+## Open questions
+- JDE item data only has 2 seeded materials (A42362, A35989C) pulled from the recorded pass — extend if the automation's SKU input can vary beyond those two.
+- Freeform/Window/Fullscreen capture-mode buttons in the Snipping Tool are decorative only (click just updates the status line) — wire them up for real if a future demo variant needs those capture modes to actually do something.

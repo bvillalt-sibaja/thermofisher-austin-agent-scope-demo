@@ -1,0 +1,20 @@
+{
+  "A42362": {
+    "item_number": "A42362",
+    "description": "BEAD, FILTRATION MEDIA - LOT EXTENDED",
+    "uom": "L",
+    "status": "Active",
+    "branch_plant": "LSG01",
+    "on_hand_qty": "5.1",
+    "lot_status": "Date Extended - Approved"
+  },
+  "A35989C": {
+    "item_number": "A35989C",
+    "description": "FINISHED GOOD - FILLING LINE COMPONENT",
+    "uom": "EA",
+    "status": "Active",
+    "branch_plant": "LSG01",
+    "on_hand_qty": "231",
+    "lot_status": "Released"
+  }
+}

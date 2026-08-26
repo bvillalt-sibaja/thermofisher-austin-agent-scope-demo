@@ -1,0 +1,3711 @@
+[
+  {
+    "label": "Start",
+    "type": "NodeInterrupt",
+    "events": [
+      {
+        "eventType": null,
+        "url": null,
+        "textValue": null,
+        "automatableStatus": null
+      }
+    ]
+  },
+  {
+    "label": "Action: Open SAP in Desktop",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select 070. LSG Prodcution in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of LSG Production Systems in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select System in  LSG Production Systems List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: User Name in SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Password in SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Display Stock / Requirements in SAP Easy Access in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open Teams in Desktop",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read Teams and Channels in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select General in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Shared in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open Production Tracker 2026.xlsx in Documents in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select CSAB in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read Teams and Channels in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Shared in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open Customer Service Alert Board 2026.xlsx Excel in CSAB in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open Chat Conversation in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: SKU Number in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open SAP in Desktop",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Display Stock / Requirements in SAP Easy Access in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: SKU Number in Material in Stock /Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Material in Stock /Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click Available qty Value in Material in Stock /Requirements in SAP ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Stor. loc. in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Stor. loc. in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Close Stor. loc. in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action:Double Click in Batch in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Batch classification in Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Batch Classification in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Classification Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action:Close Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open Microsoft Teams in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Contact in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Communicate Findings in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "Hi \u2060Dominguez,\u00a0Analisa\u2060\u2060\u2060\u2060\u2060\u2060\u2060, warner mentioned that we were able to locate 5.1 L of this lot? Is that correct?\u00a0",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Read: Open Snipping Tool in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Shapes in Snipping Tool ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Shape in Screenshot in Snipping Tool ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Write: Screenshot from Snippingtool in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "Hi \u2060Dominguez,\u00a0Analisa, warner mentioned that we were able to locate 5.1 L of this lot? Is that correct? These are beads that got date extended\u00a0\n\n\n\u2060\u2060\u2060\u2060\u2060\u2060\u2060",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Send in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read Response in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "Type a message\n",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: New Window in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Display Stock /Requirements Situation in SAP Easy Access",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: SKU Number in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Write: SKU Number in Material in Individual in Stock /Requirements List",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Individual in Stock /Requirements List",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action:Select Available qty Value in Material in Stock /Requirements in SAP ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Stock Overview in Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action:Double Click in Batch in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Batch classification in Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Classification Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action:Close Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open Find and Replace in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: SKU Number in Material in Stock /Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: SKU Number in Find and Replace in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Find Next in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of P/N# in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open SAP Logon Pad in Desktop",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select SAP Easy Access in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Display Stock /Requirements Situation in SAP Easy Access",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: P/N# in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: P/N# in Material in Stock /Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Material in Stock /Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Change in Material in Stock /Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": " Read: Visual Read Change Result in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": " Action: Select Back in Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Material Value in Stock Requirements",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Next Page in Display Material in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Plant data / sto.. in Display Material in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read in Plant data/ stor in Display Material in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Display Material in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: P/N# in Material in Stock Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: P/N# Item Number in JDE PROD Enviroment",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "https://e1lsgpd.amer.thermo.com/jde/E1Menu.maf?selectJPD920=*ALL&jdemafjasFrom=SessionTimeout&envRadioGroup=&RENDER_MAFLET=E1Menu&jdeowpBackButtonProtect=PROTECTED&jdemafjasLauncher=MafletContainer",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Find (Ctrl+Alt+I)  in JDE PROD Enviroment",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "https://e1lsgpd.amer.thermo.com/jde/E1Menu.maf?selectJPD920=*ALL&jdemafjasFrom=SessionTimeout&envRadioGroup=&RENDER_MAFLET=E1Menu&jdeowpBackButtonProtect=PROTECTED&jdemafjasLauncher=MafletContainer",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Findings in JDE PROD Enviroment",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "https://e1lsgpd.amer.thermo.com/jde/E1Menu.maf?selectJPD920=*ALL&jdemafjasFrom=SessionTimeout&envRadioGroup=&RENDER_MAFLET=E1Menu&jdeowpBackButtonProtect=PROTECTED&jdemafjasLauncher=MafletContainer",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window\n",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Change in Stock Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual read of Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Available qty in Stock/ Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Stock Overview in Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Change in Stock Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action:Select Production Order Value in Stock /Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Component Overview in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Material Value in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Material Value in Component in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Item Category in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Oper. Value in UAllocation Operations/ Sequence in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Check in Allocation Operations/ Sequence in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open SAP Easy Access in Desktop ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Display Stock / Requirements in SAP Easy Access ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Material Value in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: Material Value in Individual Acess in Stock / Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Change in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Component Value in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open Find and Replace in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Component Value in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Find Next in Find and Replace in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Find Next in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read W/O# of Production Tracker 2026 in Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Change Production Order in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: W/O# in Order in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Information in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Check in Information in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Long Text in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select General in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Component Overview in Production Order Change",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Component in Component Overview in SAP ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Aditional Data in Display Material in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Document Data in Display Material in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Document in Document Data in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Application in Display Material",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Document Application in Word",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Batch in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Batch classification in Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Classification in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Total quant. in Production order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Component Overview in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Item in Component Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Confirm. prompt in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Yes in Confirm. prompt in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Component Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Long Text in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Text in Long Text in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in in Long Text in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Goods recept. in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Create Automatic Batch in Production order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Automatic batch number allocation in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Yes in Automatic batch number allocation in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select General in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Select Start Date in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: Select Finish Date in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Release in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Save in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Refresh in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Refresh in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in MRP element data in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Edit in Additional Data for MRP Element in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action:Select Component Overview in  Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Close in Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Refresh in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Available qty in Stock/ Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Stock Overview in Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Batch in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Batch in Component Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Material in Component Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Component Overviewin SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Long Text in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Text in Long Text in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select General in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Save in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Print in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read Print in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of SKU number in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Close Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: SKU Number in Material in Stock /Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Material in Stock /Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Available qty Value in Material in Stock /Requirements in SAP ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Stock Overview in Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Batch in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Batch classification in Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Classification Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Classification Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Close Batch in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Close in Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Change in Stock Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Change Value in Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Material Value in Material Stock/ Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in MRP element data in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Prod. ord in Additional Data for MRP Element in SPA",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Component Overview in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Component Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Component Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select SAP Easy Access in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Material Doc List in SAP Easy Access",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Material in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: Material Value in Material in Material Document List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Material Document List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Excute in Material Document List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Order value in Material Document List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Order value in Display Material Document in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Component Overview in Production Order Display in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Component Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Component Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Production Order Display in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "",
+    "type": "NodeDecision",
+    "events": [
+      {
+        "eventType": null,
+        "url": null,
+        "textValue": null,
+        "automatableStatus": "unknown"
+      }
+    ],
+    "decisionRule": "Review an other component?"
+  },
+  {
+    "label": "Write: Batch value in Material Document List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Execute in Material Document List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Material Document List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Material Doc List in SAP Easy Access ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Material Value in Material Document List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select SAP Easy Access in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Display Stock Requirements Situation in SAP Easy Access ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Material Value in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Press Enter in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in Available qty in Stock/ Requirements in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Stock Overview in Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open Snipping Tool in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Snip capture window in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action:Open Snipping Tool in Desktop",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Highlighter in Screenshot in SnippingTool",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Read:Visual Read of Screenshot in Snipping Tool ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SecondarySingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Contact in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Communicate Findings in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Write: Screenshot from Snippingtool in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Send in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Close in Snipping Tool",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read Response in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Refresh in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Close in Production Order Create in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Close in Material Document List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Stock Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Other SAP Window",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Change in SAP ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Swap to Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Insert Cell in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write:Priority in inserted cell in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "1",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Automatic Color in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: MRP element data in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: MRP element data Value in inserted cell in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "5697609",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Fill Color RGB in Description in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Material Value in Stock Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: P/N# in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "A42362",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in MRP element data in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Edit in Additional Data for MRP Element in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Component Overview in Production Order Change in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Notes in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Read: P/N# in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action:Open Find and replace in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: P/N# Find and replace in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "A42362",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Find Next in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Line in Archive in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "97%",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select CSAB Tab in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Line in CSAB Tab in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "97%",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: Date Added to CSA Value in Customer Service Alert Board 2026",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Clear Contents in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Color Fill in Group in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Clear Notes in Customer Service Alert Board 2026 Excel ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Read: W/O# in Production Tracker 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: W/O# in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Back in Stock Oveview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Close in Stock Statistics in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Double Click in MRP element data in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DoubleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Edit in Additional Data for MRP Element in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Visual Read of Reqmts qty in Component Overview in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: WIP QTY in Customer Service Alert Board 2026 Excel ",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: Stock Out Date Value in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "6/29/2026",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Delete cells in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Group in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "PR TBD",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Fill Color  in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Owner cell in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "AD",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Read: Material Value in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Material Value in SKU in  Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Group and Owner Cells in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "Filling",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write:Group and Owner Cells in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "DragClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: W/O# in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "need",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Read: Material Value in Stock / Requirements List in SAP",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: SKU in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "A35989C",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: W/O# in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "N/A",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Write: Notes in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "4/23: Open PR to consume beads to avoid $$$ scrap",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select All Borders in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: WIP QTY in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "47",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Merge & Center in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Thick Outside Borders in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Cells in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "231",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: Cut Cells in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Write: Target Due Date in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "TextTyped",
+        "url": "",
+        "textValue": "TBD",
+        "automatableStatus": "none"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Channels in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select General in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Shared in General in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Metrics Carpet in Shared in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Safety Stock Metric in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select V2 Trending Safety Stock Metric GSD & BID Excel in Teams",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Read: Finish Good SKU value in Customer Service Alert Board 2026 Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Open Find and Replace in V2 Trending Safety Stock Metric GSD & BID Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "WindowOpened",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Write: Finish Good SKU value in Find and Replace in V2 Trending Safety Stock Metric GSD & BID Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "Shortcut",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "partial"
+      }
+    ]
+  },
+  {
+    "label": "Action: Select Find Next in V2 Trending Safety Stock Metric GSD & BID Excel",
+    "type": "Node",
+    "events": [
+      {
+        "eventType": "SingleClick",
+        "url": "",
+        "textValue": "",
+        "automatableStatus": "full"
+      }
+    ]
+  },
+  {
+    "label": "Stop",
+    "type": "NodeInterrupt",
+    "events": [
+      {
+        "eventType": null,
+        "url": null,
+        "textValue": null,
+        "automatableStatus": null
+      }
+    ]
+  }
+]

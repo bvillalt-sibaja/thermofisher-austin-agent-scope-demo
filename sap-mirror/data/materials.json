@@ -1,0 +1,42 @@
+{
+  "A42362": {
+    "description": "Beads, Extended Date Lot",
+    "available_qty": "5.1",
+    "uom": "L",
+    "stor_loc": "1000 - Austin Main WH",
+    "batch": "B26A4236",
+    "mrp_element": "5697609",
+    "production_order": null,
+    "plant_data": {"plant": "1200", "mrp_group": "0001", "mrp_type": "PD"}
+  },
+  "A35989C": {
+    "description": "Filling Component, Safety Stock Item",
+    "available_qty": "231",
+    "uom": "EA",
+    "stor_loc": "1000 - Austin Main WH",
+    "batch": "B26A3598",
+    "mrp_element": "5697812",
+    "production_order": null,
+    "plant_data": {"plant": "1200", "mrp_group": "0002", "mrp_type": "PD"}
+  },
+  "A50021": {
+    "description": "Cap Assembly, Standard",
+    "available_qty": "1420",
+    "uom": "EA",
+    "stor_loc": "1000 - Austin Main WH",
+    "batch": "B26A5002",
+    "mrp_element": "5698044",
+    "production_order": null,
+    "plant_data": {"plant": "1200", "mrp_group": "0001", "mrp_type": "PD"}
+  },
+  "A61190": {
+    "description": "Label Roll, 4x6",
+    "available_qty": "87",
+    "uom": "EA",
+    "stor_loc": "1000 - Austin Main WH",
+    "batch": "B26A6119",
+    "mrp_element": "5698220",
+    "production_order": null,
+    "plant_data": {"plant": "1200", "mrp_group": "0003", "mrp_type": "PD"}
+  }
+}
