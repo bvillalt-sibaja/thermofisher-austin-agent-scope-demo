@@ -1,7 +1,7 @@
 """Orchestrates all 6 Thermo Fisher Austin mirror apps (SAP, Teams, JDE,
 Snipping Tool, Excel, Word), to replay the "Agent Scope" Process Order/Sku
-Flow recording end to end. No real Office/Word app is used -- every touched
-system is a mirror.
+Flow recording end to end as ONE continuous pass. No real Office/Word app
+is used -- every touched system is a mirror.
 
 Single shared Tk root (the SAP mirror IS the root window); every other
 mirror app is opened as a Toplevel under it so all windows are visible on
@@ -9,23 +9,72 @@ screen together, matching what the human in the recording actually saw.
 Driven entirely through each app's own named widgets / Python objects
 (see mirror_driver.py) -- no OS-level clicking, no subprocess black boxes.
 
-Two materials are processed in sequence (A42362, then A35989C), mirroring
-the recording's "Review an other component?" loop -- the SAP mirror only
-models one component per production order (an explicit, documented scope
-choice in its own BUILD_NOTES.md), so the loop is driven by re-running the
-same Stock/Requirements -> Order sequence a second time rather than by an
-in-app repeating grid.
+The two materials play different roles, matching the recording's real
+structure (re-derived from the source graph's actual decision edges, not
+assumed -- see AUTOMATION_NOTES.md "Structural rebuild"): A42362 gets a
+brand-new SAP production order created and printed, landing in the
+Production Tracker; A35989C has an existing order already in the system
+reviewed via Material Document List (where the recording's real "Review an
+other component?" loop lives -- see sap_matdoc_and_display), landing on
+the Customer Service Alert Board.
 
 Usage:
     python3 orchestrator.py [--pace 0.0] [--headless]
 """
 import argparse
+import glob
 import importlib.util
 import json
 import os
 import subprocess
 import sys
-import tkinter as tk
+
+
+def _resolve_tcl_tk_library():
+    """Points TCL_LIBRARY/TK_LIBRARY at a real, working Tcl/Tk install
+    before `import tkinter` ever touches the interpreter's Tcl runtime.
+
+    Needed specifically for Maker Player's embedded Python runtime:
+    confirmed live, it ships the `tkinter`/`_tkinter` C extension but NOT
+    Tcl's own script library alongside it, so the very first `tk.Tk()`
+    fails with `TclError: Can't find a usable init.tcl` before any of this
+    project's own code runs. This is a different, more severe failure than
+    the already-documented "macOS system Tcl/Tk 8.5 renders blank
+    windows" gotcha (see the `rpa` plugin's Bot Progress window template)
+    -- there, Tk actually initializes; here it can't initialize at all.
+    Since Tcl's script library isn't something pip can install, the fix is
+    pointing at a complete Tcl/Tk already present elsewhere on the same
+    machine, not changing interpreters or installing packages.
+
+    Respects an already-valid TCL_LIBRARY (does nothing if it's already
+    set to a directory containing init.tcl) -- this only fills the gap
+    when the running interpreter has none configured. Ordered so a modern
+    Homebrew/python.org Tcl/Tk 8.6+ wins over macOS's own ancient bundled
+    8.5 if both are present (8.5 avoids the crash but is already confirmed
+    elsewhere to render zero widget content)."""
+    existing = os.environ.get("TCL_LIBRARY")
+    if existing and os.path.isfile(os.path.join(existing, "init.tcl")):
+        return
+    candidates = (
+        glob.glob("/opt/homebrew/opt/tcl-tk/lib/tcl8.*") +
+        glob.glob("/opt/homebrew/Cellar/tcl-tk*/*/lib/tcl8.*") +
+        glob.glob("/usr/local/opt/tcl-tk/lib/tcl8.*") +
+        glob.glob("/usr/local/Cellar/tcl-tk*/*/lib/tcl8.*") +
+        glob.glob("/Library/Frameworks/Python.framework/Versions/3.*/lib/tcl8.*") +
+        glob.glob("/System/Library/Frameworks/Tcl.framework/Versions/*/Resources/Scripts")
+    )
+    for tcl_dir in candidates:
+        if os.path.isfile(os.path.join(tcl_dir, "init.tcl")):
+            os.environ["TCL_LIBRARY"] = tcl_dir
+            tk_dir = tcl_dir.replace("tcl8.", "tk8.").replace(
+                "Tcl.framework", "Tk.framework")
+            if os.path.isdir(tk_dir):
+                os.environ["TK_LIBRARY"] = tk_dir
+            return
+
+
+_resolve_tcl_tk_library()
+import tkinter as tk  # noqa: E402 -- must follow _resolve_tcl_tk_library()
 
 DEMO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SEED_DIR = os.path.join(DEMO_ROOT, "seed-files")

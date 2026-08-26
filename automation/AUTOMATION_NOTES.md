@@ -14,14 +14,43 @@ Two entry-point files, for two different execution contexts:
   line can't reference a not-yet-cloned path -- it's parsed before any task
   code runs). **Verified locally** with a real (non-`--dryrun`) `robot` run
   of this exact file -- the clone and dynamic import genuinely worked,
-  production orders/Teams/JDE/Word all came back correct. **NOT yet verified
-  via an actual Maker Player upload-and-run** -- two real risks a local run
-  can't catch: Maker Player's embedded Python runtime may not have
-  `openpyxl`/`Pillow`/`python-docx` installed (all three are required by the
-  mirror apps, no provisioning step guarantees them), and `git` must be on
-  whatever machine's PATH actually runs it. Budget for one real
-  upload-and-run cycle before calling this done for that target, per this
-  skill's own standing rule.
+  production orders/Teams/JDE/Word all came back correct.
+
+**First real Maker Player upload-and-run (2026-08-26) found a genuine
+bug the local run couldn't:** `TclError: Can't find a usable init.tcl` --
+Maker Player's embedded Python runtime ships the `tkinter`/`_tkinter` C
+extension but not Tcl's own script library alongside it, so the very
+first `tk.Tk()` (creating the SAP mirror's root window) failed before any
+of this project's own code ran. This is a different, more severe failure
+than the already-documented "macOS system Tcl/Tk 8.5 renders blank
+windows" gotcha (Bot Progress window template) -- there Tk initializes
+fine, just renders nothing; here it can't initialize at all, and it's not
+fixable with `pip install` since Tcl's script library isn't a Python
+package.
+
+**Fix:** `orchestrator.py` now resolves `TCL_LIBRARY`/`TK_LIBRARY` at
+import time (`_resolve_tcl_tk_library()`, runs before `import tkinter`)
+by searching known absolute install paths for a real Tcl/Tk on the same
+machine -- same technique as the Bot Progress window's own
+`Resolve Progress Python`, just pointing at a library directory instead
+of choosing an interpreter. On this dev Mac it finds Homebrew's
+`/opt/homebrew/Cellar/tcl-tk*/*/lib/tcl8.6` (the same one `rpa-env`'s own
+Python already uses); the system's ancient Tcl 8.5 is included as a
+last-resort fallback candidate (avoids the crash, but is already known to
+render blank windows, so it's ordered after every modern candidate).
+Respects an already-valid `TCL_LIBRARY` if one is set, so this never
+overrides a deliberately-configured environment.
+
+Re-verified after the fix: local `robot thermofisher_demo.robot` and
+`robot thermofisher_demo.player.robot` runs both still pass (this
+environment variable resolution is additive -- harmless when Tk already
+works fine on its own, which is the case for both `rpa-env` and system
+`python3` on this Mac). **Still not independently confirmed inside Maker
+Player itself** -- that fix targets the exact error message from the
+first real upload-and-run, but a second upload-and-run is the only way to
+confirm it actually resolves there, and there may be a second layer of
+missing dependencies (`openpyxl`/`Pillow`/`python-docx`) behind this one
+that a local run still can't surface.
 
 Replays the recorded process (`../recorded_steps.json`, 309 steps) against
 all 6 mirror apps -- `../sap-mirror`, `../teams-mirror`, `../jde-mirror`,
