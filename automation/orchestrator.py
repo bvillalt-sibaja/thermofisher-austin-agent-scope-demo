@@ -310,7 +310,7 @@ class GeminiClient:
         Gemini is disabled or the call fails."""
         if not self.enabled:
             return fallback_sku
-        self._show_progress("Calling Gemini", "Understanding the Teams request...", loading=True)
+        self._show_progress("Calling LLM", "Understanding the Teams request...", loading=True)
         self._step(f"Gemini: extracting SKU from message: {message_text!r}")
         try:
             prompt = (
@@ -323,11 +323,11 @@ class GeminiClient:
             if not sku:
                 raise ValueError("empty response")
             self._step(f"Gemini: extracted SKU -> {sku}")
-            self._show_progress("Gemini Responded", f"Understood the request -- looking up {sku}.")
+            self._show_progress("LLM Responded", f"Understood the request -- looking up {sku}.")
             return sku
         except Exception as e:
             self._step(f"Gemini: extract_sku failed ({e!r}), falling back to {fallback_sku}")
-            self._show_progress("Gemini Unavailable", f"Falling back to the scripted SKU ({fallback_sku}).")
+            self._show_progress("LLM Unavailable", f"Falling back to the scripted SKU ({fallback_sku}).")
             return fallback_sku
 
     def compose_reply(self, sku, material_info, fallback_message):
@@ -337,7 +337,7 @@ class GeminiClient:
         disabled or the call fails."""
         if not self.enabled:
             return fallback_message
-        self._show_progress("Calling Gemini", "Composing a reply from the SAP findings...", loading=True)
+        self._show_progress("Calling LLM", "Composing a reply from the SAP findings...", loading=True)
         info = material_info or {}
         self._step(f"Gemini: composing reply for {sku} from {info}")
         try:
@@ -353,11 +353,11 @@ class GeminiClient:
             if not message:
                 raise ValueError("empty response")
             self._step(f"Gemini: composed reply -> {message!r}")
-            self._show_progress("Gemini Responded", "Reply composed from the live SAP findings.")
+            self._show_progress("LLM Responded", "Reply composed from the live SAP findings.")
             return message
         except Exception as e:
             self._step(f"Gemini: compose_reply failed ({e!r}), falling back to scripted message")
-            self._show_progress("Gemini Unavailable", "Falling back to the scripted message.")
+            self._show_progress("LLM Unavailable", "Falling back to the scripted message.")
             return fallback_message
 
 
