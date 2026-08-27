@@ -1,5 +1,54 @@
 # Thermo Fisher Austin "Agent Scope" demo automation
 
+## Gemini integration (2026-08-27) — NLU + composed replies
+`thermofisher_demo.player.robot` now has a `${GEMINI_API_KEY}` Variable
+(default `${EMPTY}`, safe to commit -- see that file's own Documentation
+for the full reasoning). When set, `GeminiClient` (orchestrator.py) does
+two things via real `generateContent` calls (plain `urllib.request`, no
+SDK dependency):
+1. **NLU**: extracts the SKU from the actual incoming Teams chat text
+   ("Hey, can you check on SKU A42362? ...") instead of trusting the
+   pre-set `pending_sku` seed attribute.
+2. **Composes the reply**: writes the Teams message sent back from the
+   real SAP findings for that material (available qty, batch,
+   description), instead of sending the pre-scripted `outgoing_message_1`/
+   `outgoing_message_2` text.
+
+Both narrate through the Bot Progress window with the same
+loading-spinner + result pattern as the Teams API calls (see "Loading
+spinner" section below) -- e.g. "Calling Gemini / Understanding the Teams
+request..." then "Gemini Responded / Understood the request -- looking up
+A42362."
+
+**Fails soft, on purpose.** An empty key, a network error, a non-200, or
+an unexpected response shape all fall back to the scripted SKU/message
+rather than taking the demo down -- confirmed live this specific Google
+account's access to `generateContent` has been genuinely intermittent
+(worked, then failed identically for 60+ seconds of retries, then worked
+again later with no code change on this end -- see the account-side
+debugging trail below). This isn't defensive-for-its-own-sake; it's
+responding to an observed real failure mode.
+
+**Account-side setup this took, for the record** (all on Google's side,
+not this codebase): the org's plain-API-key access is blocked by policy
+(`API_KEY_SERVICE_BLOCKED`); an OAuth path was fully built and confirmed
+working through Vertex AI's endpoint up to a billing-not-enabled wall; the
+Generative Language API itself turned out to not be enabled on the
+project (`gcloud services enable generativelanguage.googleapis.com`
+fixed that) -- after which the *plain API key* started working directly,
+no OAuth needed, though intermittently. `gemini_oauth_setup.py` (the
+one-time interactive OAuth helper built while debugging this) is NOT part
+of the repo -- it lives in scratch space, not needed now that the plain
+key path works when the account cooperates.
+
+**Verified:** a real Gemini call succeeding, live -- extracted `A42362`
+correctly from the real chat text, and composed "5.1 L Beads available,
+Batch B26A4236, extended lot." from real SAP data (visible in the actual
+Teams chat thread afterward, not just logged). Also verified the empty-key
+fallback path produces byte-identical results to the pre-Gemini behavior
+(same production orders, same message count). Both paths confirmed via
+direct `orchestrator.run(...)` calls with and without a key.
+
 Three entry-point files:
 - **`thermofisher_demo.robot`** -- local iteration on this Mac. Imports the
   sibling Python modules directly (static `Library ThermoFisherDemoLib.py`),

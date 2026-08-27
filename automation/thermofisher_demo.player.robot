@@ -30,18 +30,37 @@ Documentation     Maker Player entry point for the Thermo Fisher Austin Agent
 ...               these mirror apps need all three, and there's no dependency
 ...               manifest/provisioning step here to guarantee them; (2) `git`
 ...               itself must be on whatever machine's PATH runs this.
+...
+...               ${GEMINI_API_KEY}: optional. When set, the bot uses Gemini
+...               to understand the incoming Teams request (NLU -- extracts
+...               the SKU from the actual chat message text) and to compose
+...               its reply from the real SAP findings, instead of the
+...               scripted text -- narrated in the Bot Progress window the
+...               same way the Teams API calls are, with a loading beat.
+...               Left empty here deliberately -- this file is public, and a
+...               real key committed to it would be scraped within minutes.
+...               Fill in the real value locally without committing it, or
+...               override it at run time (Maker Player's own variable
+...               override, or `--variable GEMINI_API_KEY:<key>` for a local
+...               `robot` run) -- either way the key itself never needs to
+...               touch this file's committed content. Empty/missing/failing
+...               all fall back cleanly to the scripted request-understanding
+...               and reply text -- confirmed live this account's Gemini
+...               access has been intermittent, so this isn't optional
+...               robustness, it's load-bearing.
 Library           Process
 Library           OperatingSystem
 Library           BuiltIn
 
 *** Variables ***
 ${REPO_URL}       https://github.com/bvillalt-sibaja/thermofisher-austin-agent-scope-demo.git
+${GEMINI_API_KEY}    ${EMPTY}
 
 *** Tasks ***
 Run Thermo Fisher Agent Scope Demo
     ${repo_dir}=    Fetch Dependencies
     Import Library    ${repo_dir}/automation/ThermoFisherDemoLib.py
-    ${result}=    Run Full Demo    pace=0.4    visible=${TRUE}
+    ${result}=    Run Full Demo    pace=0.4    visible=${TRUE}    gemini_api_key=${GEMINI_API_KEY}
     Log    Production orders created: ${result}[production_orders]
     Log    Teams messages in thread: ${result}[teams_chat_thread]
     Log    JDE last result: ${result}[jde_last_result]

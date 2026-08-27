@@ -259,6 +259,108 @@ class TeamsApiClient:
         return reply_text
 
 
+class GeminiClient:
+    """Calls Google's Gemini API for two things in this demo: understanding
+    a Teams request in natural language (extracting the SKU being asked
+    about from the raw incoming message text, instead of just reading a
+    pre-set attribute) and composing the natural-language reply sent back,
+    grounded in what was actually found in SAP -- "NLU of the request" and
+    "answering accordingly", per the ask this was built for.
+
+    Plain `urllib.request` (stdlib), same rationale as TeamsApiClient: this
+    is Python calling an HTTP API directly, not an RF keyword -- pulling in
+    a Google SDK here would be backwards for the same reason RPA.HTTP would
+    be backwards there, and adds a dependency this project doesn't
+    otherwise need.
+
+    Confirmed live this specific account's access to generateContent has
+    been intermittent (worked twice, then reverted to a 403 for over a
+    minute of retries, cause unresolved) -- so every call here is wrapped
+    to fail soft: an empty key or ANY failure (network error, non-200,
+    unexpected response shape, timeout) falls back to the pre-scripted
+    seed value rather than taking the whole demo down. `enabled` reflects
+    only whether a key is configured, not whether Gemini is currently
+    reachable -- that's discovered per-call, live, same as the rest of
+    this project's own "verify live" bar."""
+    MODEL = "gemini-2.5-flash"
+    TIMEOUT = 15
+
+    def __init__(self, api_key, show_progress, step):
+        self.api_key = (api_key or "").strip()
+        self._show_progress = show_progress
+        self._step = step
+
+    @property
+    def enabled(self):
+        return bool(self.api_key)
+
+    def _generate(self, prompt):
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.MODEL}:generateContent?key={self.api_key}"
+        body = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode("utf-8")
+        req = urllib.request.Request(
+            url, data=body, headers={"Content-Type": "application/json"}, method="POST")
+        with urllib.request.urlopen(req, timeout=self.TIMEOUT) as r:
+            result = json.loads(r.read())
+        return result["candidates"][0]["content"]["parts"][0]["text"].strip()
+
+    def extract_sku(self, message_text, fallback_sku):
+        """NLU step: reads the actual Teams message text and asks Gemini
+        which material/SKU is being asked about, rather than trusting a
+        pre-set `pending_sku` attribute. Falls back to `fallback_sku` if
+        Gemini is disabled or the call fails."""
+        if not self.enabled:
+            return fallback_sku
+        self._show_progress("Calling Gemini", "Understanding the Teams request...", loading=True)
+        self._step(f"Gemini: extracting SKU from message: {message_text!r}")
+        try:
+            prompt = (
+                "You are helping an RPA bot understand a Teams chat request. "
+                "Extract the material/SKU number mentioned in this message. "
+                "Reply with ONLY the SKU code, nothing else, no punctuation, no explanation.\n\n"
+                f"Message: {message_text}"
+            )
+            sku = self._generate(prompt).strip().strip('"').strip("'")
+            if not sku:
+                raise ValueError("empty response")
+            self._step(f"Gemini: extracted SKU -> {sku}")
+            self._show_progress("Gemini Responded", f"Understood the request -- looking up {sku}.")
+            return sku
+        except Exception as e:
+            self._step(f"Gemini: extract_sku failed ({e!r}), falling back to {fallback_sku}")
+            self._show_progress("Gemini Unavailable", f"Falling back to the scripted SKU ({fallback_sku}).")
+            return fallback_sku
+
+    def compose_reply(self, sku, material_info, fallback_message):
+        """Response-generation step: writes the Teams reply from the
+        actual SAP findings for `sku`, rather than sending a pre-written
+        scripted message. Falls back to `fallback_message` if Gemini is
+        disabled or the call fails."""
+        if not self.enabled:
+            return fallback_message
+        self._show_progress("Calling Gemini", "Composing a reply from the SAP findings...", loading=True)
+        info = material_info or {}
+        self._step(f"Gemini: composing reply for {sku} from {info}")
+        try:
+            prompt = (
+                "You are an RPA bot replying on Teams chat after looking something up in SAP. "
+                "Write a short, natural, one-sentence reply confirming the finding -- no preamble, "
+                "no quotes around the message, just the message text itself.\n\n"
+                f"Context: a coworker asked about SKU {sku} stock/batch status. You found: "
+                f"Available quantity = {info.get('available_qty')} {info.get('uom')}, "
+                f"Batch = {info.get('batch')}, Description = {info.get('description')}."
+            )
+            message = self._generate(prompt)
+            if not message:
+                raise ValueError("empty response")
+            self._step(f"Gemini: composed reply -> {message!r}")
+            self._show_progress("Gemini Responded", "Reply composed from the live SAP findings.")
+            return message
+        except Exception as e:
+            self._step(f"Gemini: compose_reply failed ({e!r}), falling back to scripted message")
+            self._show_progress("Gemini Unavailable", "Falling back to the scripted message.")
+            return fallback_message
+
+
 def _auto_confirm(parent, title, message, name="confirm_dialog"):
     """Replaces the blocking Yes/No SAP popup for unattended demo playback:
     the recording's judgment-call confirms (Edit MRP data? / Create batch
@@ -295,7 +397,7 @@ CSAB_ROW = {
 
 
 class Orchestrator:
-    def __init__(self, pace=0.0, visible=True, teams_mode="gui"):
+    def __init__(self, pace=0.0, visible=True, teams_mode="gui", gemini_api_key=""):
         if teams_mode not in ("gui", "api"):
             raise ValueError(f"teams_mode must be 'gui' or 'api', got {teams_mode!r}")
         self.pace = pace
@@ -304,6 +406,13 @@ class Orchestrator:
         self.log = []
         sap_popups.confirm_dialog = _auto_confirm
         sap_screens.confirm_dialog = _auto_confirm
+
+        # Falls back to the GEMINI_API_KEY env var if no key was passed in
+        # explicitly -- supports both "set it as an RF Variable" (the
+        # .robot file's own path) and "set it in my shell" (local testing)
+        # without needing two different code paths.
+        gemini_key = gemini_api_key or os.environ.get("GEMINI_API_KEY", "")
+        self.gemini = GeminiClient(gemini_key, self.show_progress, self.step)
 
         self.root = _create_tk_root(os.path.join(AUTOMATION_DIR, "vendor"))  # this IS the primary SAP window
         self.root.title("SAP Easy Access - Session 1")
@@ -790,6 +899,14 @@ class Orchestrator:
             message1 = self._teams_seed["outgoing_message_1"]
             message2 = self._teams_seed["outgoing_message_2"]
 
+            # NLU: understand SKU 1 from the actual incoming chat text (not
+            # just the pre-set attribute) via Gemini -- no-op if no key is
+            # configured. Only sku1 has a real incoming message to parse in
+            # the seed data (see AUTOMATION_NOTES.md); sku2 is a follow-on
+            # component with no separate chat message of its own.
+            incoming_text = self._teams_seed["chat_thread"][0]["text"]
+            sku1 = self.gemini.extract_sku(incoming_text, fallback_sku=sku1)
+
             self.show_progress("Logging Into SAP", "The bot is signing into the LSG Production system in SAP.")
             self.run_login()
 
@@ -799,6 +916,11 @@ class Orchestrator:
                                 f"The bot is looking up stock and batch details for material {sku1} in SAP.")
             self.sap.current_material = sku1
             self.sap_stock_lookup(sku1)
+
+            # Answering accordingly: compose the Teams reply from what was
+            # actually just found in SAP, via Gemini -- falls back to the
+            # scripted message1 if no key is configured or the call fails.
+            message1 = self.gemini.compose_reply(sku1, self.sap_data.get_material(sku1), fallback_message=message1)
 
             self.show_progress("Sharing Findings on Teams",
                                 "The bot snipped the SAP stock overview and sent it to the team on Teams, "
@@ -828,6 +950,8 @@ class Orchestrator:
                                 f"The bot is looking up stock and batch details for material {sku2} in SAP.")
             self.sap.current_material = sku2
             self.sap_stock_lookup(sku2)
+
+            message2 = self.gemini.compose_reply(sku2, self.sap_data.get_material(sku2), fallback_message=message2)
 
             self.show_progress("Reviewing Material Document",
                                 f"The bot is reviewing the existing production order on file for {sku2} in SAP, "
@@ -882,8 +1006,8 @@ class Orchestrator:
             pass
 
 
-def run(pace=0.0, visible=True, teams_mode="gui"):
-    orch = Orchestrator(pace=pace, visible=visible, teams_mode=teams_mode)
+def run(pace=0.0, visible=True, teams_mode="gui", gemini_api_key=""):
+    orch = Orchestrator(pace=pace, visible=visible, teams_mode=teams_mode, gemini_api_key=gemini_api_key)
     try:
         result = orch.run_full_demo()
     finally:
@@ -897,9 +1021,11 @@ if __name__ == "__main__":
     parser.add_argument("--headless", action="store_true")
     parser.add_argument("--keep-open", action="store_true")
     parser.add_argument("--teams-mode", choices=["gui", "api"], default="gui")
+    parser.add_argument("--gemini-api-key", default="")
     args = parser.parse_args()
 
-    orch, result = run(pace=args.pace, visible=not args.headless, teams_mode=args.teams_mode)
+    orch, result = run(pace=args.pace, visible=not args.headless, teams_mode=args.teams_mode,
+                        gemini_api_key=args.gemini_api_key)
     print(f"\n{len(result['log'])} steps logged.")
     print(f"Production orders created: {list(result['production_orders'].keys())}")
     print(f"Teams messages in thread: {len(result['teams_chat_thread'])}")
