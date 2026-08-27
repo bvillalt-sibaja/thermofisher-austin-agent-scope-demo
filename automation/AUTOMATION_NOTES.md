@@ -178,6 +178,37 @@ Progress (Excel/Word appear later in the run, same as always). Process
 lifecycle confirmed clean both modes (no orphaned `teams-api-mirror`
 process after a run).
 
+### Loading spinner + a real "waiting" beat (2026-08-27)
+Real localhost HTTP calls complete in single-digit milliseconds -- too
+fast to see a "the bot is waiting on the API" moment happening at all, so
+the first version's Bot Progress updates just flashed past. Two changes:
+
+1. **`show_progress(headline, body, loading=False)`** (orchestrator.py)
+   now writes a `"loading"` bool into the state JSON alongside
+   headline/body.
+2. **`bot_progress_window.py`** animates a plain ASCII spinner
+   (`|/-\`, deliberately not Unicode/Braille glyphs -- this project has
+   already hit real tofu-rendering issues with exotic Unicode in this Tk
+   build, see sap-mirror's `icons.py`) in front of the headline on its own
+   ~120ms `.after()` timer, independent of the ~200ms state-file poll
+   timer, whenever `loading` is true; stops and shows plain text the
+   moment a later state update sets `loading: false`.
+
+`TeamsApiClient.read_sku`/`send_message` now show a `loading=True` state
+("...waiting for a response...") with a deliberate `LOADING_DELAY = 1.2s`
+pause BEFORE actually making each call, then a `loading=False` state with
+the real result after. `send_message` has two such beats in sequence
+(sending the message, then waiting for the reply), matching the two real
+API calls it actually makes. Verified with real cropped `screencapture`
+frames of the spinner mid-animation (confirmed the glyph actually
+advances, `|` -> `/`, not a static character) and by polling
+`bot_progress_state.json` every second across a real run -- every
+loading/result transition landed exactly where designed, for both
+`read_sku` (called twice) and `send_message`'s two-phase flow. Full
+`robot thermofisher_demo.teams_api.robot` run still passes end to end
+after the change (total runtime is intentionally a few seconds longer now
+-- that's the point, so the waiting beat is actually visible).
+
 ## Structural rebuild (2026-08-26) — matching the recording's REAL flow
 The original build (and its "one representative pass" / "full recording
 including the loop" scoping) misread the recording's actual structure. Two

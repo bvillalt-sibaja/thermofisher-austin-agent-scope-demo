@@ -187,6 +187,12 @@ class TeamsApiClient:
     library here would be backwards; the .robot task itself only ever
     calls the single `Run Full Demo` keyword, same as every other variant."""
 
+    # Deliberate pause before each call, and again before its result, so a
+    # human watching the Bot Progress window actually sees the spinner
+    # rather than a same-frame flash -- these are real localhost calls that
+    # would otherwise complete in single-digit milliseconds.
+    LOADING_DELAY = 1.2
+
     def __init__(self, base_url, show_progress, step):
         self.base_url = base_url
         self._show_progress = show_progress
@@ -218,22 +224,38 @@ class TeamsApiClient:
         raise RuntimeError(f"Teams API server never came up: {last_error}")
 
     def read_sku(self, which):
-        self._show_progress("Calling Teams API", "GET /sku -- checking for a SKU to look up.")
+        self._show_progress("Calling Teams API", "GET /sku -- waiting for a response...", loading=True)
         self._step("Teams API: GET /sku")
+        time.sleep(self.LOADING_DELAY)
         sku = self._get("/sku")[which]
         self._step(f"Teams API: {which} -> {sku}")
+        self._show_progress("Teams API Responded", f"GET /sku -> {which} is {sku}.")
+        time.sleep(self.LOADING_DELAY)
         return sku
 
     def send_message(self, text, image_path=None):
         preview = text if len(text) <= 60 else text[:57] + "..."
-        self._show_progress("Calling Teams API", f'POST /messages -- sending: "{preview}"')
+        self._show_progress("Calling Teams API", f'POST /messages -- waiting for a response...\n"{preview}"',
+                             loading=True)
         self._step(f"Teams API: POST /messages (text={text!r}, image_path={image_path!r})")
+        time.sleep(self.LOADING_DELAY)
         self._post("/messages", {"text": text, "image_path": image_path})
-        self._show_progress("Reading Teams API Reply", "POST /messages/deliver-reply -- checking for a response.")
+        self._show_progress("Teams API Responded", f'Message sent: "{preview}"')
+        time.sleep(self.LOADING_DELAY)
+
+        self._show_progress("Calling Teams API", "POST /messages/deliver-reply -- waiting for a reply...",
+                             loading=True)
+        time.sleep(self.LOADING_DELAY)
         result = self._post("/messages/deliver-reply", {})
         reply = result.get("reply")
         reply_text = reply["text"] if reply else None
         self._step(f"Teams API: reply -> {reply_text!r}")
+        if reply_text:
+            reply_preview = reply_text if len(reply_text) <= 60 else reply_text[:57] + "..."
+            self._show_progress("Teams API Responded", f'Reply received: "{reply_preview}"')
+        else:
+            self._show_progress("Teams API Responded", "No reply pending.")
+        time.sleep(self.LOADING_DELAY)
         return reply_text
 
 
@@ -352,13 +374,17 @@ class Orchestrator:
             self.step(f"Bot Progress window failed to start (non-fatal): {e}")
             self._progress_proc = None
 
-    def show_progress(self, headline, body):
+    def show_progress(self, headline, body, loading=False):
         """Updates the Bot Progress window with a new headline (3-6 words,
-        present tense) and a one/two-sentence body. Safe to call even if the
-        window failed to start or was closed by hand."""
+        present tense) and a one/two-sentence body. `loading=True` shows an
+        animated spinner in front of the headline instead of static text --
+        for a deliberate "waiting on something" beat (e.g. an in-flight API
+        call) before a follow-up call shows what was actually picked up.
+        Safe to call even if the window failed to start or was closed by
+        hand."""
         try:
             with open(PROGRESS_STATE_PATH, "w") as f:
-                json.dump({"headline": headline, "body": body}, f)
+                json.dump({"headline": headline, "body": body, "loading": loading}, f)
         except OSError:
             pass
 

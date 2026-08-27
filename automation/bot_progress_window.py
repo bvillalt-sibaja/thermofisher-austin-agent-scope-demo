@@ -42,11 +42,18 @@ fine in it, in which case point this at a different interpreter that does
         Create File    ${state_path}    content=${json}
 
 Standalone usage: `python3 bot_progress_window.py <state_file_path>`. The
-state file is a small JSON object `{"headline": "...", "body": "..."}`;
-whichever process owns the automation rewrites it whenever the step changes,
-and this script polls it (every 200ms) and updates the window in place. The
-window exits when the automation kills this process (e.g. RF's
-`Terminate Process`) or when the human closes it by hand.
+state file is a small JSON object `{"headline": "...", "body": "...",
+"loading": false}`; whichever process owns the automation rewrites it
+whenever the step changes, and this script polls it (every 200ms) and
+updates the window in place. `loading` is optional (defaults to false) --
+when true, a small ASCII spinner (plain "|/-\\", not Unicode/emoji, which
+has rendered as tofu in this Tk build before) animates in front of the
+headline on its own independent ~120ms timer, for a deliberate "waiting on
+something" beat before the next state update shows what was picked up
+(e.g. "Calling Teams API" + spinner, then a follow-up state with the
+actual result once it's back). The window exits when the automation kills
+this process (e.g. RF's `Terminate Process`) or when the human closes it
+by hand.
 """
 import json
 import sys
@@ -79,6 +86,12 @@ WINDOW_WIDTH = 412
 WINDOW_HEIGHT = 200
 SCREEN_MARGIN = 24
 POLL_MS = 200
+SPIN_MS = 120
+# Plain ASCII, not a Unicode/Braille spinner glyph set -- this project has
+# already hit real cases of exotic Unicode/emoji rendering as tofu/blank in
+# this Tk build (see sap-ecc-demo's icons.py), so sticking to "|/-\" here
+# rather than risking the same on a from-scratch spinner.
+SPINNER_FRAMES = ["|", "/", "-", "\\"]
 
 # 32x32 PNG render of the Mimica mark (mimica.ico), embedded so this file has
 # no external asset to lose track of. tk.PhotoImage decodes PNG natively on
@@ -154,6 +167,26 @@ def main(state_path):
     body_label.pack(fill="both", expand=True)
 
     last_raw = None
+    spin_state = {"loading": False, "headline": "", "index": 0}
+
+    def render_headline():
+        if spin_state["loading"]:
+            frame = SPINNER_FRAMES[spin_state["index"] % len(SPINNER_FRAMES)]
+            headline_label.config(text=f"{frame}  {spin_state['headline']}")
+        else:
+            headline_label.config(text=spin_state["headline"])
+
+    def spin():
+        if spin_state["loading"]:
+            spin_state["index"] += 1
+            try:
+                render_headline()
+            except tk.TclError:
+                return
+        try:
+            root.after(SPIN_MS, spin)
+        except tk.TclError:
+            pass
 
     def poll():
         nonlocal last_raw
@@ -169,8 +202,13 @@ def main(state_path):
                 state = json.loads(raw) if raw.strip() else {}
             except json.JSONDecodeError:
                 state = {}
+            was_loading = spin_state["loading"]
+            spin_state["headline"] = state.get("headline", "")
+            spin_state["loading"] = bool(state.get("loading", False))
+            if spin_state["loading"] and not was_loading:
+                spin_state["index"] = 0  # fresh spin each time loading (re)starts
             try:
-                headline_label.config(text=state.get("headline", ""))
+                render_headline()
                 body_label.config(text=state.get("body", ""))
             except tk.TclError:
                 # The orchestrator's Terminate Process call can land between
@@ -184,6 +222,7 @@ def main(state_path):
             pass
 
     root.after(POLL_MS, poll)
+    root.after(SPIN_MS, spin)
     root.mainloop()
 
 
