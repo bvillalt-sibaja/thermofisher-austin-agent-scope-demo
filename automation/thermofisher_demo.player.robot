@@ -41,7 +41,7 @@ ${REPO_URL}       https://github.com/bvillalt-sibaja/thermofisher-austin-agent-s
 Run Thermo Fisher Agent Scope Demo
     ${repo_dir}=    Fetch Dependencies
     Import Library    ${repo_dir}/automation/ThermoFisherDemoLib.py
-    ${result}=    Run Full Demo    pace=0.15    visible=${TRUE}
+    ${result}=    Run Full Demo    pace=0.4    visible=${TRUE}
     Log    Production orders created: ${result}[production_orders]
     Log    Teams messages in thread: ${result}[teams_chat_thread]
     Log    JDE last result: ${result}[jde_last_result]

@@ -25,7 +25,7 @@ Documentation     Thermo Fisher Austin - Process Order/Sku Flow (Agent Scope) de
 Library           ThermoFisherDemoLib.py
 
 *** Variables ***
-${PACE}           0.15
+${PACE}           0.4
 ${VISIBLE}        ${TRUE}
 
 *** Tasks ***
