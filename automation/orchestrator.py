@@ -191,7 +191,7 @@ class TeamsApiClient:
     # human watching the Bot Progress window actually sees the spinner
     # rather than a same-frame flash -- these are real localhost calls that
     # would otherwise complete in single-digit milliseconds.
-    LOADING_DELAY = 1.2
+    LOADING_DELAY = 1.8
 
     def __init__(self, base_url, show_progress, step):
         self.base_url = base_url
