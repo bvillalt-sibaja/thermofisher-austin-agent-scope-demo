@@ -1,6 +1,6 @@
 # Thermo Fisher Austin "Agent Scope" demo automation
 
-Two entry-point files, for two different execution contexts:
+Three entry-point files:
 - **`thermofisher_demo.robot`** -- local iteration on this Mac. Imports the
   sibling Python modules directly (static `Library ThermoFisherDemoLib.py`),
   no network dependency. Launch: `~/rpa-env/bin/python3 -m robot thermofisher_demo.robot`
@@ -15,6 +15,10 @@ Two entry-point files, for two different execution contexts:
   code runs). **Verified locally** with a real (non-`--dryrun`) `robot` run
   of this exact file -- the clone and dynamic import genuinely worked,
   production orders/Teams/JDE/Word all came back correct.
+- **`thermofisher_demo.teams_api.robot`** -- identical to
+  `thermofisher_demo.player.robot` except Teams is integrated via a fake
+  local HTTP API (`../teams-api-mirror/server.py`) instead of the Teams
+  GUI mirror (`../teams-mirror/`). See "API-based Teams variant" below.
 
 **First real Maker Player upload-and-run (2026-08-26) found a genuine
 bug the local run couldn't:** `TclError: Can't find a usable init.tcl` --
@@ -107,6 +111,72 @@ loop. No real installed app (Word, Excel, ...) is used anywhere anymore;
 every touched system is a from-scratch mirror, each individually reskinned
 for visual fidelity to the real app it stands in for (see each mirror's own
 BUILD_NOTES.md for its "Visual fidelity pass" notes).
+
+## API-based Teams variant (2026-08-27)
+`thermofisher_demo.teams_api.robot` runs the exact same demo as
+`thermofisher_demo.player.robot` (same materials, same SAP/JDE/Excel/Word
+work, same Bot Progress narration) with one architectural swap: Teams is
+integrated via `../teams-api-mirror/server.py` (a real local HTTP server,
+stdlib `http.server` only) instead of driving the Teams GUI mirror
+(`../teams-mirror/`). Point: showing what "integrate via API" looks like
+next to "automate the UI", side by side, using the same underlying data.
+
+**Shared orchestrator, not a duplicated one.** `Orchestrator` takes a
+`teams_mode` param (`"gui"` default, or `"api"`) rather than this being a
+forked copy of `orchestrator.py` -- SAP/JDE/Excel/Word/Snipping-Tool logic
+is unchanged and shared between both variants, only Teams-touching methods
+(`read_sku_from_teams`, `teams_communicate_findings`,
+`_open_shared_excel_file`) branch on mode. Avoids two copies of ~500 lines
+drifting apart over time. `run_full_demo`, `sap_*`, `excel_touch_safety_stock_metric`,
+etc. are 100% shared code paths -- verified both modes independently
+(GUI-mode regression run + API-mode run) after the change, same results
+both times.
+
+**`TeamsApiClient`** (in `orchestrator.py`) is the API-mode client: plain
+`urllib.request` (stdlib, no extra dependency -- and deliberately not
+`RPA.HTTP`, since this class is plain Python called from Python, not RF
+keywords called from the .robot task). Every call narrates itself through
+the Bot Progress window (`show_progress`) since there's no Teams window in
+this variant for a human to watch -- confirmed live: polling
+`bot_progress_state.json` across a real run caught `{"headline": "Calling
+Teams API", "body": "GET /sku -- checking for a SKU to look up."}`
+appearing exactly when expected.
+
+**Excel-from-Teams in API mode:** the GUI variant discovers shared files
+by clicking through Teams' channel/file UI; API mode has no Teams window
+to click through, so `_open_shared_excel_file` narrates a "GET shared file
+reference" call via Bot Progress and opens the Excel mirror directly --
+same end state (the right workbook opens), different path to get there.
+
+**A real bug found and fixed while building this:** rapid successive runs
+of the fake API server failed with `OSError: [Errno 48] Address already
+in use` even though `lsof` confirmed no process was actually holding the
+port -- classic TCP `TIME_WAIT`, not a leftover process. Plain
+`socketserver.TCPServer` defaults `allow_reuse_address` to `False`
+(`http.server.HTTPServer` sets it `True`, but `server.py` uses the plainer
+`TCPServer` base). Fixed by setting it explicitly; verified with 3 rapid
+successive start/stop cycles that previously would have failed on the
+2nd or 3rd.
+
+**Known limitation, not engineered around:** the API server's port
+(8765) is hardcoded, not dynamically allocated. A genuinely orphaned
+process from a hard-crashed prior run could still collide -- `_stop_teams_api()`
+runs in `run_full_demo`'s own `finally` block (same lifecycle as the Bot
+Progress window) so a normal run always cleans up, and this hasn't been
+observed as a real problem outside of rapid back-to-back manual test
+runs. Not adding dynamic port allocation for a failure mode that hasn't
+actually occurred in a real demo run, per this project's own standing
+"don't engineer resilience for gotchas you haven't observed" rule.
+
+**Verified:** GUI-mode regression run (unchanged behavior after the
+refactor) and API-mode run both produce identical correct results
+(production orders `['410892', '411050']`, 7 Teams messages, correct JDE
+result, Word opened) -- confirmed via direct `orchestrator.py --teams-mode
+{gui,api}` runs. Live-visible API-mode run confirmed via `osascript`
+window listing: no "Microsoft Teams" window ever appears, only SAP/JDE/Bot
+Progress (Excel/Word appear later in the run, same as always). Process
+lifecycle confirmed clean both modes (no orphaned `teams-api-mirror`
+process after a run).
 
 ## Structural rebuild (2026-08-26) — matching the recording's REAL flow
 The original build (and its "one representative pass" / "full recording

@@ -28,6 +28,9 @@ import json
 import os
 import subprocess
 import sys
+import time
+import urllib.error
+import urllib.request
 
 
 import tkinter as tk
@@ -166,6 +169,74 @@ def _load_module(name, path):
     return mod
 
 
+class TeamsApiClient:
+    """Stands in for the Teams GUI mirror in the API-based demo variant
+    (thermofisher_demo.teams_api.robot): talks to the fake Teams API
+    server (../teams-api-mirror/server.py, launched as its own subprocess
+    -- same pattern as the Bot Progress window, a separate process rather
+    than a thread) over real HTTP instead of clicking through a chat
+    window. There's no window for a human to watch here, so every call
+    narrates itself through the Bot Progress window (`show_progress`)
+    instead -- that's the whole point of this variant: showing what
+    "integrate via API" looks like versus "automate the UI", side by side
+    with the GUI version.
+
+    Talks plain `urllib.request` (stdlib, no extra dependency) rather than
+    `RPA.HTTP` -- this class is plain Python driven from Python
+    (orchestrator.py), not Robot Framework keywords, so pulling in an RF
+    library here would be backwards; the .robot task itself only ever
+    calls the single `Run Full Demo` keyword, same as every other variant."""
+
+    def __init__(self, base_url, show_progress, step):
+        self.base_url = base_url
+        self._show_progress = show_progress
+        self._step = step
+
+    def _get(self, path):
+        with urllib.request.urlopen(f"{self.base_url}{path}", timeout=10) as r:
+            return json.loads(r.read())
+
+    def _post(self, path, payload):
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            f"{self.base_url}{path}", data=data,
+            headers={"Content-Type": "application/json"}, method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=10) as r:
+            return json.loads(r.read())
+
+    def wait_until_ready(self, timeout=10):
+        deadline = time.time() + timeout
+        last_error = None
+        while time.time() < deadline:
+            try:
+                self._get("/sku")
+                return
+            except (urllib.error.URLError, ConnectionError) as e:
+                last_error = e
+                time.sleep(0.2)
+        raise RuntimeError(f"Teams API server never came up: {last_error}")
+
+    def read_sku(self, which):
+        self._show_progress("Calling Teams API", "GET /sku -- checking for a SKU to look up.")
+        self._step("Teams API: GET /sku")
+        sku = self._get("/sku")[which]
+        self._step(f"Teams API: {which} -> {sku}")
+        return sku
+
+    def send_message(self, text, image_path=None):
+        preview = text if len(text) <= 60 else text[:57] + "..."
+        self._show_progress("Calling Teams API", f'POST /messages -- sending: "{preview}"')
+        self._step(f"Teams API: POST /messages (text={text!r}, image_path={image_path!r})")
+        self._post("/messages", {"text": text, "image_path": image_path})
+        self._show_progress("Reading Teams API Reply", "POST /messages/deliver-reply -- checking for a response.")
+        result = self._post("/messages/deliver-reply", {})
+        reply = result.get("reply")
+        reply_text = reply["text"] if reply else None
+        self._step(f"Teams API: reply -> {reply_text!r}")
+        return reply_text
+
+
 def _auto_confirm(parent, title, message, name="confirm_dialog"):
     """Replaces the blocking Yes/No SAP popup for unattended demo playback:
     the recording's judgment-call confirms (Edit MRP data? / Create batch
@@ -202,9 +273,12 @@ CSAB_ROW = {
 
 
 class Orchestrator:
-    def __init__(self, pace=0.0, visible=True):
+    def __init__(self, pace=0.0, visible=True, teams_mode="gui"):
+        if teams_mode not in ("gui", "api"):
+            raise ValueError(f"teams_mode must be 'gui' or 'api', got {teams_mode!r}")
         self.pace = pace
         self.visible = visible
+        self.teams_mode = teams_mode
         self.log = []
         sap_popups.confirm_dialog = _auto_confirm
         sap_screens.confirm_dialog = _auto_confirm
@@ -216,8 +290,22 @@ class Orchestrator:
         self.sap_data = SAPData()
         self.sap = SAPSession(self.root, self.sap_data, start_screen="LOGIN_SELECT")
 
-        self.teams = TeamsApp(self.root)
-        self.teams.open_excel_file = self._open_excel_via_teams  # bypass subprocess spawn
+        self.teams = None
+        self.teams_api = None
+        self._teams_api_proc = None
+        if teams_mode == "gui":
+            self.teams = TeamsApp(self.root)
+            self.teams.open_excel_file = self._open_excel_via_teams  # bypass subprocess spawn
+        else:
+            self._start_teams_api()
+
+        # Both modes need the seed data (outgoing message text) -- the GUI
+        # mirror wraps it in TeamsApp.data, the API client's own server
+        # reads the same file independently, so just load it directly here
+        # rather than adding a third way to reach it.
+        seed_path = os.path.join(DEMO_ROOT, "teams-mirror", "data", "seed.json")
+        with open(seed_path) as f:
+            self._teams_seed = json.load(f)
 
         jde_path = os.path.join(DEMO_ROOT, "jde-mirror", "main.py")
         jde_mod = _load_module("jde_main", jde_path)
@@ -283,6 +371,27 @@ class Orchestrator:
                 pass
             self._progress_proc = None
 
+    def _start_teams_api(self):
+        """Launches the fake Teams API server as its own OS process (same
+        pattern as the Bot Progress window -- a real separate process, not
+        a thread, so this is a genuine local HTTP service the automation
+        calls into, not an in-process shortcut) and waits for it to accept
+        connections before returning."""
+        server_script = os.path.join(DEMO_ROOT, "teams-api-mirror", "server.py")
+        port = 8765
+        self._teams_api_proc = subprocess.Popen([sys.executable, server_script, str(port)])
+        self.teams_api = TeamsApiClient(f"http://127.0.0.1:{port}", self.show_progress, self.step)
+        self.teams_api.wait_until_ready()
+
+    def _stop_teams_api(self):
+        if self._teams_api_proc is not None:
+            try:
+                self._teams_api_proc.terminate()
+                self._teams_api_proc.wait(timeout=3)
+            except Exception:
+                pass
+            self._teams_api_proc = None
+
     def _focus(self, win):
         """Raises the given window above all the others so a human watching
         the demo can see which app the bot is currently working in, then
@@ -340,6 +449,8 @@ class Orchestrator:
         self._pump()
 
     def read_sku_from_teams(self, which="pending_sku"):
+        if self.teams_mode == "api":
+            return self.teams_api.read_sku(which)
         sku = getattr(self.teams.data, which)
         self.step(f"Teams: read SKU from chat -> {sku}")
         return sku
@@ -362,13 +473,18 @@ class Orchestrator:
         click(self.sap.win, "btn_back")  # back to Stock/Requirements results
 
     def teams_communicate_findings(self, sku, message):
-        self._focus(self.teams)
-        self.teams.show_chat()
-        self._pump()
         self.step("Snipping Tool: New Snip over Stock Overview")
         self.snip.new_snip()
         self.snip.set_mode("shapes")
         self.snip.save_and_handoff()
+        snip_path = os.path.join(DEMO_ROOT, "shared_state", "latest_snip.png")
+
+        if self.teams_mode == "api":
+            return self.teams_api.send_message(message, image_path=snip_path)
+
+        self._focus(self.teams)
+        self.teams.show_chat()
+        self._pump()
         self.step("Teams: attach screenshot + send findings message")
         set_entry(self.teams, "message_entry", message)
         click(self.teams, "attach_button")
@@ -547,13 +663,27 @@ class Orchestrator:
         self._pump()
         return self.jde.result
 
-    def excel_update_production_tracker(self, sku):
+    def _open_shared_excel_file(self, fname, team_name, file_widget):
+        """Opens an Excel-mirror window for a file 'shared' in Teams.
+        GUI mode clicks through the Teams window to get there (matching
+        the recording); API mode has no Teams window to click through, so
+        it calls the fake Teams API for the file reference instead and
+        opens the Excel mirror directly -- narrated via Bot Progress since
+        there's nothing on screen to show that step happening."""
+        if self.teams_mode == "api":
+            self.show_progress("Calling Teams API", f"GET shared file reference for {fname}.")
+            self.step(f"Teams API: fetched shared file reference for {fname}")
+            self._open_excel_via_teams(fname)
+            return
         self._focus(self.teams)
-        self.step("Teams: open Production Tracker 2026.xlsx (Shared files)")
+        self.step(f"Teams: open {fname} (Shared files)")
         self.teams.show_channels()
-        self.teams.channels_screen.select_team("General")
+        self.teams.channels_screen.select_team(team_name)
         self.teams.channels_screen.show_tab("files")
-        click(self.teams, "file_production_tracker_2026")
+        click(self.teams, file_widget)
+
+    def excel_update_production_tracker(self, sku):
+        self._open_shared_excel_file("Production Tracker 2026.xlsx", "General", "file_production_tracker_2026")
 
         model = self.workbook_model("Production Tracker 2026.xlsx")
         row = model.find_row_by_value(sku)
@@ -575,12 +705,8 @@ class Orchestrator:
         self._pump()
 
     def excel_update_csab(self, sku):
-        self._focus(self.teams)
-        self.step("Teams: open Customer Service Alert Board 2026.xlsx (CSAB)")
-        self.teams.show_channels()
-        self.teams.channels_screen.select_team("CSAB")
-        self.teams.channels_screen.show_tab("files")
-        click(self.teams, "file_customer_service_alert_board_2026")
+        self._open_shared_excel_file(
+            "Customer Service Alert Board 2026.xlsx", "CSAB", "file_customer_service_alert_board_2026")
 
         model = self.workbook_model("Customer Service Alert Board 2026.xlsx")
         row = model.find_row_by_value(sku)
@@ -635,8 +761,8 @@ class Orchestrator:
             self.step("=== Trigger: Teams message mentions a SKU to look up ===")
             sku1 = self.read_sku_from_teams("pending_sku")
             sku2 = self.read_sku_from_teams("second_sku")
-            message1 = self.teams.data.outgoing_message_1
-            message2 = self.teams.data.outgoing_message_2
+            message1 = self._teams_seed["outgoing_message_1"]
+            message2 = self._teams_seed["outgoing_message_2"]
 
             self.show_progress("Logging Into SAP", "The bot is signing into the LSG Production system in SAP.")
             self.run_login()
@@ -701,18 +827,24 @@ class Orchestrator:
             return self.summarize()
         finally:
             self.stop_bot_progress()
+            self._stop_teams_api()
 
     def summarize(self):
+        if self.teams_mode == "api":
+            chat_thread = self.teams_api._get("/messages")["messages"]
+        else:
+            chat_thread = list(self.teams.data.chat_thread)
         return {
             "log": list(self.log),
             "production_orders": dict(self.sap_data.production_orders),
-            "teams_chat_thread": list(self.teams.data.chat_thread),
+            "teams_chat_thread": chat_thread,
             "jde_last_result": self.jde.result,
             "word_opened": getattr(self, "_word_opened", False),
         }
 
     def close(self):
         self.stop_bot_progress()
+        self._stop_teams_api()
         try:
             for w in list(SAPSession._windows):
                 w.win.destroy()
@@ -724,8 +856,8 @@ class Orchestrator:
             pass
 
 
-def run(pace=0.0, visible=True):
-    orch = Orchestrator(pace=pace, visible=visible)
+def run(pace=0.0, visible=True, teams_mode="gui"):
+    orch = Orchestrator(pace=pace, visible=visible, teams_mode=teams_mode)
     try:
         result = orch.run_full_demo()
     finally:
@@ -738,9 +870,10 @@ if __name__ == "__main__":
     parser.add_argument("--pace", type=float, default=0.0)
     parser.add_argument("--headless", action="store_true")
     parser.add_argument("--keep-open", action="store_true")
+    parser.add_argument("--teams-mode", choices=["gui", "api"], default="gui")
     args = parser.parse_args()
 
-    orch, result = run(pace=args.pace, visible=not args.headless)
+    orch, result = run(pace=args.pace, visible=not args.headless, teams_mode=args.teams_mode)
     print(f"\n{len(result['log'])} steps logged.")
     print(f"Production orders created: {list(result['production_orders'].keys())}")
     print(f"Teams messages in thread: {len(result['teams_chat_thread'])}")
