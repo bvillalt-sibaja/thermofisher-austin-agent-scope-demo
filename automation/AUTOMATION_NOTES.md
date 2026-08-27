@@ -45,12 +45,58 @@ Re-verified after the fix: local `robot thermofisher_demo.robot` and
 `robot thermofisher_demo.player.robot` runs both still pass (this
 environment variable resolution is additive -- harmless when Tk already
 works fine on its own, which is the case for both `rpa-env` and system
-`python3` on this Mac). **Still not independently confirmed inside Maker
-Player itself** -- that fix targets the exact error message from the
-first real upload-and-run, but a second upload-and-run is the only way to
-confirm it actually resolves there, and there may be a second layer of
-missing dependencies (`openpyxl`/`Pillow`/`python-docx`) behind this one
-that a local run still can't surface.
+`python3` on this Mac).
+
+**Second real Maker Player upload-and-run** got past the TclError
+entirely (confirming the fix above worked) but hit a NEW failure:
+`TypeError: bad argument type for built-in operation`, with no useful
+detail in Maker Player's own console/log output. Found Maker Player's
+actual bundled runtime on disk at
+`~/Library/Application Support/MimicaMaker/runtime/venv/bin/python3`
+(Python 3.12.7, confirmed has `openpyxl`/`Pillow`/`python-docx` all
+installed -- that flagged risk was a non-issue) and used it directly
+(bypassing Maker Player's own UI entirely) to reproduce the exact failure
+locally with a full traceback:
+```
+_tkinter.TclError: invalid command name "PyImagingPhoto"
+  (during PIL.ImageTk.PhotoImage -> _imagingtk._pyimagingtkcall)
+TypeError: bad argument type for built-in operation
+  (PIL's own exception handling re-raising the above, losing the real message)
+```
+Root cause: `PIL.ImageTk.PhotoImage` doesn't go through plain `tkinter` --
+it uses PIL's separate `_imagingtk` C extension, which registers a custom
+Tcl command ("PyImagingPhoto") into the running interpreter for fast
+image transfer. That registration silently failed under Maker Player's
+bundled Pillow build (a Tcl/Tk ABI mismatch between whatever `_imagingtk`
+was compiled against and what's actually loaded at runtime -- unrelated
+to, and apparently not fixed by, the TCL_LIBRARY resolution above, since
+`_imagingtk` is a separately-compiled binary bridge, not something that
+reads TCL_LIBRARY the way `_tkinter`'s own init does). Two files used
+this: `teams-mirror/teams_app/icons.py` (8 call sites) and
+`snipping-tool-mirror/main.py` (2 call sites) -- every other mirror app's
+icons (`sap-mirror`, `bot_progress_window.py`) already used native
+`tkinter.PhotoImage` directly and were never affected.
+
+**Fix:** both files now convert PIL images to Tk photos via an in-memory
+PNG round-trip and plain `tkinter.PhotoImage(data=...)` instead of
+`ImageTk.PhotoImage(img)` -- `tkinter.PhotoImage` is part of `_tkinter`
+itself, so it can't be out of sync with whatever Tcl/Tk `_tkinter` is
+actually using, unlike PIL's separately-compiled bridge. Re-verified by
+running `orchestrator.py` directly under Maker Player's own interpreter
+(same trick as above) end to end: production orders, Teams messages, JDE
+result, and Word-opened all came back correct. Also found and fixed a
+small, previously-unreachable shutdown race while at it: the Bot Progress
+window's own `poll()` callback could fire once more right as its window
+was being torn down by `Terminate Process`, printing a harmless but
+scary-looking `TclError: invalid command name ".!frame.!label"` traceback
+to stderr -- now caught and ignored (the process is exiting either way).
+This was never reachable before since the run always crashed earlier;
+getting this far for the first time is what surfaced it.
+
+Both fixes re-verified with a real `robot` run via Maker Player's own
+bundled `robot` binary against a fresh clone of the pushed repo (not just
+a direct Python call) -- genuinely reproduces what Maker Player itself
+does, just without going through its UI.
 
 Replays the recorded process (`../recorded_steps.json`, 309 steps) against
 all 6 mirror apps -- `../sap-mirror`, `../teams-mirror`, `../jde-mirror`,

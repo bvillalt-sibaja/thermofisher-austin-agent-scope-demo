@@ -7,9 +7,31 @@ just using Pillow (already a dependency of the Snipping Tool mirror in
 this project) instead of hand-rolled pixel grids.
 """
 
-from PIL import Image, ImageDraw, ImageFont, ImageTk
+import io
+
+from PIL import Image, ImageDraw, ImageFont
 
 _cache = {}
+
+
+def _to_photo(img):
+    """Converts a PIL image to a `tkinter.PhotoImage` via an in-memory PNG
+    round-trip, NOT `PIL.ImageTk.PhotoImage` -- that goes through PIL's
+    separate `_imagingtk` C bridge, which registers a custom Tcl command
+    ("PyImagingPhoto") into the running interpreter. Confirmed live: under
+    Maker Player's bundled Pillow build, that registration silently fails
+    (mismatched Tcl/Tk ABI the wheel was built against vs. what's actually
+    loaded at runtime), and the *next* call into it raises `_tkinter.TclError:
+    invalid command name "PyImagingPhoto"`, which PIL's own exception
+    handling then re-raises as an opaque `TypeError: bad argument type for
+    built-in operation` -- no mention of Tcl/Tk anywhere in that message.
+    `tkinter.PhotoImage(data=...)` is part of `_tkinter` itself (the same
+    module handling every other widget here), so it can't be out of sync
+    with the running Tcl/Tk the way a separately-compiled bridge can."""
+    import tkinter as tk
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return tk.PhotoImage(data=buf.getvalue())
 
 
 def _font(size, bold=True):
@@ -44,7 +66,7 @@ def avatar(initials, bg="#6264A7", fg="#FFFFFF", size=32):
     d.ellipse((0, 0, big - 1, big - 1), fill=bg)
     _centered_text(d, (big / 2, big / 2 + 1), initials, _font(int(big * 0.38)), fg)
     img = img.resize((size, size), Image.LANCZOS)
-    photo = ImageTk.PhotoImage(img)
+    photo = _to_photo(img)
     _cache[key] = photo
     return photo
 
@@ -63,7 +85,7 @@ def square_avatar(initials, bg="#6264A7", fg="#FFFFFF", size=32):
     d.rounded_rectangle((0, 0, big - 1, big - 1), radius=big * 0.22, fill=bg)
     _centered_text(d, (big / 2, big / 2 + 1), initials, _font(int(big * 0.38)), fg)
     img = img.resize((size, size), Image.LANCZOS)
-    photo = ImageTk.PhotoImage(img)
+    photo = _to_photo(img)
     _cache[key] = photo
     return photo
 
@@ -135,7 +157,7 @@ def rail_icon(kind, size=26, color="#FFFFFF"):
         d.line((big * 0.5, big * 0.18, big * 0.5, big * 0.82), fill=color, width=lw)
         d.line((big * 0.18, big * 0.5, big * 0.82, big * 0.5), fill=color, width=lw)
     img = img.resize((size, size), Image.LANCZOS)
-    photo = ImageTk.PhotoImage(img)
+    photo = _to_photo(img)
     _cache[key] = photo
     return photo
 
@@ -160,7 +182,7 @@ def person_icon(size=22, color="#5B5FC7"):
               fill="#FFFFFF")
     d.pieslice((big * 0.24, big * 0.56, big * 0.76, big * 1.10), 180, 360, fill="#FFFFFF")
     img = img.resize((size, size), Image.LANCZOS)
-    photo = ImageTk.PhotoImage(img)
+    photo = _to_photo(img)
     _cache[key] = photo
     return photo
 
@@ -258,7 +280,7 @@ def small_icon(kind, size=16, color="#5B5B5B"):
         d.polygon([(big * 0.88, big * 0.5), (big * 0.14, big * 0.16), (big * 0.38, big * 0.5),
                    (big * 0.14, big * 0.84)], fill=color)
     img = img.resize((size, size), Image.LANCZOS)
-    photo = ImageTk.PhotoImage(img)
+    photo = _to_photo(img)
     _cache[key] = photo
     return photo
 
@@ -287,7 +309,7 @@ def send_button_icon(diameter=28, bg="#6264A7", fg="#FFFFFF"):
     d.polygon([(big * 0.70, big * 0.5), (big * 0.32, big * 0.28), (big * 0.44, big * 0.5),
                (big * 0.32, big * 0.72)], fill=fg)
     img = img.resize((diameter, diameter), Image.LANCZOS)
-    photo = ImageTk.PhotoImage(img)
+    photo = _to_photo(img)
     _cache[key] = photo
     return photo
 
@@ -306,7 +328,7 @@ def rounded_rect_outline(w, h, radius, outline, width_px=1, fill=None):
                           w * scale - 1 - width_px * scale / 2, h * scale - 1 - width_px * scale / 2),
                          radius=radius * scale, outline=outline, width=max(1, width_px * scale), fill=fill)
     img = img.resize((w, h), Image.LANCZOS)
-    photo = ImageTk.PhotoImage(img)
+    photo = _to_photo(img)
     _cache[key] = photo
     return photo
 
@@ -321,6 +343,6 @@ def rounded_rect_bg(w, h, radius, fill):
     d = ImageDraw.Draw(img)
     d.rounded_rectangle((0, 0, w * scale - 1, h * scale - 1), radius=radius * scale, fill=fill)
     img = img.resize((w, h), Image.LANCZOS)
-    photo = ImageTk.PhotoImage(img)
+    photo = _to_photo(img)
     _cache[key] = photo
     return photo

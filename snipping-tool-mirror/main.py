@@ -29,7 +29,9 @@ import os
 import tkinter as tk
 from datetime import datetime, timezone
 
-from PIL import Image, ImageDraw, ImageFont, ImageTk
+import io
+
+from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SHARED = os.path.join(ROOT, "shared_state")
@@ -62,12 +64,31 @@ def render_stock_overview_placeholder():
     return img
 
 
+def _to_photo(img):
+    """Converts a PIL image to a `tkinter.PhotoImage` via an in-memory PNG
+    round-trip, NOT `PIL.ImageTk.PhotoImage` -- that goes through PIL's
+    separate `_imagingtk` C bridge, which registers a custom Tcl command
+    ("PyImagingPhoto") into the running interpreter. Confirmed live: under
+    Maker Player's bundled Pillow build, that registration silently fails
+    (mismatched Tcl/Tk ABI the wheel was built against vs. what's actually
+    loaded at runtime), and the *next* call into it raises `_tkinter.TclError:
+    invalid command name "PyImagingPhoto"`, which PIL's own exception
+    handling then re-raises as an opaque `TypeError: bad argument type for
+    built-in operation` -- no mention of Tcl/Tk anywhere in that message.
+    `tkinter.PhotoImage(data=...)` is part of `_tkinter` itself (the same
+    module handling every other widget here), so it can't be out of sync
+    with the running Tcl/Tk the way a separately-compiled bridge can."""
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return tk.PhotoImage(data=buf.getvalue())
+
+
 # --------------------------------------------------------------- icon set
 def _icon(draw_fn, size=20, color="#3B3B3B"):
     img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     draw_fn(d, size, color)
-    return ImageTk.PhotoImage(img)
+    return _to_photo(img)
 
 
 def _icon_new(d, s, c):
@@ -218,7 +239,7 @@ class SnippingToolApp(tk.Toplevel):
 
     def new_snip(self):
         self.base_image = render_stock_overview_placeholder()
-        self.tk_image = ImageTk.PhotoImage(self.base_image)
+        self.tk_image = _to_photo(self.base_image)
         self.shapes = []
         self.canvas.delete("all")
         self.canvas.create_image(0, 0, anchor="nw", image=self.tk_image)

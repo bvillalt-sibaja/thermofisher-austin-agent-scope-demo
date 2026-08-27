@@ -169,9 +169,19 @@ def main(state_path):
                 state = json.loads(raw) if raw.strip() else {}
             except json.JSONDecodeError:
                 state = {}
-            headline_label.config(text=state.get("headline", ""))
-            body_label.config(text=state.get("body", ""))
-        root.after(POLL_MS, poll)
+            try:
+                headline_label.config(text=state.get("headline", ""))
+                body_label.config(text=state.get("body", ""))
+            except tk.TclError:
+                # The orchestrator's Terminate Process call can land between
+                # this poll firing and the widgets actually being torn down
+                # -- a benign shutdown race (confirmed live), not a real
+                # error; the process is exiting either way.
+                return
+        try:
+            root.after(POLL_MS, poll)
+        except tk.TclError:
+            pass
 
     root.after(POLL_MS, poll)
     root.mainloop()
