@@ -1,4 +1,4 @@
-"""Bot Progress window: a small always-on-top notification window that
+"""Agent Progress window: a small always-on-top notification window that
 narrates what an unattended automation is doing, step by step, for a human
 watching it run. Styled to match the Maker Player desktop app's actual brand
 tokens (hosts/src/MakerPlayer.Desktop/Themes/Colors.axaml + Brushes.axaml:
@@ -30,13 +30,13 @@ fine in it, in which case point this at a different interpreter that does
         Create File    ${STATE_PATH}    content={}
         Start Process    ${PROGRESS_PYTHON}    ${CURDIR}/bot_progress_window.py    ${STATE_PATH}
         ...    alias=bot_progress
-        Update Bot Progress    ${STATE_PATH}    Looking Up the Claim
-        ...    The bot opened Salesforce, found the case, and read the claim number.
+        Update Agent Progress    ${STATE_PATH}    Looking Up the Claim
+        ...    The agent opened Salesforce, found the case, and read the claim number.
         # ... real automation steps ...
         Terminate Process    bot_progress
 
     *** Keywords ***
-    Update Bot Progress
+    Update Agent Progress
         [Arguments]    ${state_path}    ${headline}    ${body}
         ${json}=    Evaluate    json.dumps({"headline": $headline, "body": $body})    modules=json
         Create File    ${state_path}    content=${json}
@@ -128,7 +128,7 @@ def _pick_font(root, *candidates, size=13, weight="normal"):
 
 def main(state_path):
     root = tk.Tk()
-    root.title("Bot Progress")
+    root.title("Agent Progress")
     root.configure(bg=BACKGROUND)
 
     screen_w = root.winfo_screenwidth()

@@ -47,7 +47,7 @@ def _tcl_tk_candidates(vendor_dir):
     1. No TCL_LIBRARY configured at all -> `Can't find a usable init.tcl`
        (Tk can't initialize whatsoever -- different and more severe than
        the already-documented "macOS system Tcl/Tk 8.5 renders blank
-       windows" gotcha in the `rpa` plugin's Bot Progress window template,
+       windows" gotcha in the `rpa` plugin's Agent Progress window template,
        where Tk at least initializes).
     2. Pointed at a real but WRONG-VERSION Tcl/Tk (Homebrew 8.6.18) ->
        still `Can't find a usable init.tcl`, this time because a stock
@@ -115,7 +115,7 @@ def _create_tk_root(vendor_dir):
     not corrupt the process for a later successful one, tested against
     both a nonexistent path and a deliberately version-mismatched
     init.tcl). Deliberately does NOT spawn a subprocess to validate a
-    candidate first: this project's own Bot Progress window template
+    candidate first: this project's own Agent Progress window template
     already documents, from a real reverted attempt, that re-invoking
     `sys.executable` under Maker Player's embedded runner can kill the
     entire execution ("Execution cancelled or timed out; embedded Python
@@ -173,10 +173,10 @@ class TeamsApiClient:
     """Stands in for the Teams GUI mirror in the API-based demo variant
     (thermofisher_demo.teams_api.robot): talks to the fake Teams API
     server (../teams-api-mirror/server.py, launched as its own subprocess
-    -- same pattern as the Bot Progress window, a separate process rather
+    -- same pattern as the Agent Progress window, a separate process rather
     than a thread) over real HTTP instead of clicking through a chat
     window. There's no window for a human to watch here, so every call
-    narrates itself through the Bot Progress window (`show_progress`)
+    narrates itself through the Agent Progress window (`show_progress`)
     instead -- that's the whole point of this variant: showing what
     "integrate via API" looks like versus "automate the UI", side by side
     with the GUI version.
@@ -188,7 +188,7 @@ class TeamsApiClient:
     calls the single `Run Full Demo` keyword, same as every other variant."""
 
     # Deliberate pause before each call, and again before its result, so a
-    # human watching the Bot Progress window actually sees the spinner
+    # human watching the Agent Progress window actually sees the spinner
     # rather than a same-frame flash -- these are real localhost calls that
     # would otherwise complete in single-digit milliseconds.
     LOADING_DELAY = 1.8
@@ -284,6 +284,12 @@ class GeminiClient:
     this project's own "verify live" bar."""
     MODEL = "gemini-2.5-flash"
     TIMEOUT = 15
+    # Deliberate pause after showing the analysis result, so a human
+    # watching the Agent Progress window actually has time to read it before
+    # the next phase's progress update overwrites it (same rationale as
+    # TeamsApiClient.LOADING_DELAY, duplicated rather than shared since
+    # these two classes are otherwise independent).
+    LOADING_DELAY = 1.8
 
     def __init__(self, api_key, show_progress, step):
         self.api_key = (api_key or "").strip()
@@ -307,23 +313,36 @@ class GeminiClient:
         """NLU step: reads the actual Teams message text and asks Gemini
         which material/SKU is being asked about, rather than trusting a
         pre-set `pending_sku` attribute. Falls back to `fallback_sku` if
-        Gemini is disabled or the call fails."""
+        Gemini is disabled or the call fails.
+
+        Shows THREE distinct Agent Progress states, not two: the call
+        in-flight, then a dedicated step displaying the actual analysis
+        text the model returned (not a generic "looking up X" filler) --
+        with its own deliberate pause so a human watching can actually
+        read it before the next phase's progress update overwrites it --
+        then the SKU that analysis produced."""
         if not self.enabled:
             return fallback_sku
         self._show_progress("Calling LLM", "Understanding the Teams request...", loading=True)
         self._step(f"Gemini: extracting SKU from message: {message_text!r}")
         try:
             prompt = (
-                "You are helping an RPA bot understand a Teams chat request. "
-                "Extract the material/SKU number mentioned in this message. "
-                "Reply with ONLY the SKU code, nothing else, no punctuation, no explanation.\n\n"
+                "You are helping an RPA agent understand a Teams chat request. "
+                "Reply with EXACTLY two lines and nothing else:\n"
+                "Line 1: the material/SKU number mentioned in the message, no punctuation.\n"
+                "Line 2: a short one-sentence analysis (under 20 words) of what's being asked.\n\n"
                 f"Message: {message_text}"
             )
-            sku = self._generate(prompt).strip().strip('"').strip("'")
+            raw = self._generate(prompt)
+            lines = [ln.strip() for ln in raw.strip().splitlines() if ln.strip()]
+            sku = lines[0].strip('"').strip("'") if lines else ""
+            analysis = lines[1] if len(lines) > 1 else f"Request is about SKU {sku}."
             if not sku:
-                raise ValueError("empty response")
-            self._step(f"Gemini: extracted SKU -> {sku}")
-            self._show_progress("LLM Responded", f"Understood the request -- looking up {sku}.")
+                raise ValueError(f"no SKU in response: {raw!r}")
+            self._step(f"Gemini: analysis -> {analysis!r}, extracted SKU -> {sku}")
+            self._show_progress("LLM Analysis", analysis)
+            time.sleep(self.LOADING_DELAY)
+            self._show_progress("Request Understood", f"Looking up {sku} in SAP.")
             return sku
         except Exception as e:
             self._step(f"Gemini: extract_sku failed ({e!r}), falling back to {fallback_sku}")
@@ -342,7 +361,7 @@ class GeminiClient:
         self._step(f"Gemini: composing reply for {sku} from {info}")
         try:
             prompt = (
-                "You are an RPA bot replying on Teams chat after looking something up in SAP. "
+                "You are an RPA agent replying on Teams chat after looking something up in SAP. "
                 "Write a short, natural, one-sentence reply confirming the finding -- no preamble, "
                 "no quotes around the message, just the message text itself.\n\n"
                 f"Context: a coworker asked about SKU {sku} stock/batch status. You found: "
@@ -353,7 +372,10 @@ class GeminiClient:
             if not message:
                 raise ValueError("empty response")
             self._step(f"Gemini: composed reply -> {message!r}")
-            self._show_progress("LLM Responded", "Reply composed from the live SAP findings.")
+            preview = message if len(message) <= 80 else message[:77] + "..."
+            self._show_progress("LLM Analysis", f'Composed reply: "{preview}"')
+            time.sleep(self.LOADING_DELAY)
+            self._show_progress("Request Understood", "Sending the reply on Teams.")
             return message
         except Exception as e:
             self._step(f"Gemini: compose_reply failed ({e!r}), falling back to scripted message")
@@ -467,7 +489,7 @@ class Orchestrator:
 
     # ------------------------------------------------------------- helpers
     def start_bot_progress(self):
-        """Launches the always-on-top 'Bot Progress' narration window as its
+        """Launches the always-on-top 'Agent Progress' narration window as its
         own OS process (Tkinter's Cocoa backend needs its event loop on a
         process's own main thread, not a thread inside this one -- see
         build-rpa-automation.md section 10). Runs under this same
@@ -480,11 +502,11 @@ class Orchestrator:
         try:
             self._progress_proc = subprocess.Popen([sys.executable, PROGRESS_SCRIPT, PROGRESS_STATE_PATH])
         except Exception as e:
-            self.step(f"Bot Progress window failed to start (non-fatal): {e}")
+            self.step(f"Agent Progress window failed to start (non-fatal): {e}")
             self._progress_proc = None
 
     def show_progress(self, headline, body, loading=False):
-        """Updates the Bot Progress window with a new headline (3-6 words,
+        """Updates the Agent Progress window with a new headline (3-6 words,
         present tense) and a one/two-sentence body. `loading=True` shows an
         animated spinner in front of the headline instead of static text --
         for a deliberate "waiting on something" beat (e.g. an in-flight API
@@ -508,7 +530,7 @@ class Orchestrator:
 
     def _start_teams_api(self):
         """Launches the fake Teams API server as its own OS process (same
-        pattern as the Bot Progress window -- a real separate process, not
+        pattern as the Agent Progress window -- a real separate process, not
         a thread, so this is a genuine local HTTP service the automation
         calls into, not an in-process shortcut) and waits for it to accept
         connections before returning."""
@@ -529,7 +551,7 @@ class Orchestrator:
 
     def _focus(self, win):
         """Raises the given window above all the others so a human watching
-        the demo can see which app the bot is currently working in, then
+        the demo can see which app the agent is currently working in, then
         pumps the event loop so the raise actually takes effect before the
         next action runs."""
         try:
@@ -803,7 +825,7 @@ class Orchestrator:
         GUI mode clicks through the Teams window to get there (matching
         the recording); API mode has no Teams window to click through, so
         it calls the fake Teams API for the file reference instead and
-        opens the Excel mirror directly -- narrated via Bot Progress since
+        opens the Excel mirror directly -- narrated via Agent Progress since
         there's nothing on screen to show that step happening."""
         if self.teams_mode == "api":
             self.show_progress("Calling Teams API", f"GET shared file reference for {fname}.")
@@ -892,7 +914,7 @@ class Orchestrator:
         self.start_bot_progress()
         try:
             self.show_progress("Reading Teams for a SKU",
-                                "The bot is checking Teams chat for messages flagging SKUs to look up.")
+                                "The agent is checking Teams chat for messages flagging SKUs to look up.")
             self.step("=== Trigger: Teams message mentions a SKU to look up ===")
             sku1 = self.read_sku_from_teams("pending_sku")
             sku2 = self.read_sku_from_teams("second_sku")
@@ -907,13 +929,13 @@ class Orchestrator:
             incoming_text = self._teams_seed["chat_thread"][0]["text"]
             sku1 = self.gemini.extract_sku(incoming_text, fallback_sku=sku1)
 
-            self.show_progress("Logging Into SAP", "The bot is signing into the LSG Production system in SAP.")
+            self.show_progress("Logging Into SAP", "The agent is signing into the LSG Production system in SAP.")
             self.run_login()
 
             # ---- Material 1: check stock, create a NEW production order ----
             self.step(f"\n--- Material 1/2: {sku1} (new production order) ---")
             self.show_progress(f"Checking Stock for {sku1}",
-                                f"The bot is looking up stock and batch details for material {sku1} in SAP.")
+                                f"The agent is looking up stock and batch details for material {sku1} in SAP.")
             self.sap.current_material = sku1
             self.sap_stock_lookup(sku1)
 
@@ -923,56 +945,56 @@ class Orchestrator:
             message1 = self.gemini.compose_reply(sku1, self.sap_data.get_material(sku1), fallback_message=message1)
 
             self.show_progress("Sharing Findings on Teams",
-                                "The bot snipped the SAP stock overview and sent it to the team on Teams, "
+                                "The agent snipped the SAP stock overview and sent it to the team on Teams, "
                                 "then read their reply.")
             self.teams_communicate_findings(sku1, message1)
             self.sap_open_second_window(sku1)
 
             self.show_progress(f"Checking JDE for {sku1}",
-                                "The bot is looking up the item in JD Edwards to confirm it's active.")
+                                "The agent is looking up the item in JD Edwards to confirm it's active.")
             self.jde_lookup(sku1)
 
             self.show_progress("Opening Material Document",
-                                f"The bot is opening the linked specification document for {sku1} in SAP.")
+                                f"The agent is opening the linked specification document for {sku1} in SAP.")
             self.sap_change_material_and_document(sku1, open_word=True)
 
             self.show_progress("Creating Production Order",
-                                f"The bot is creating a new SAP production order for {sku1}.")
+                                f"The agent is creating a new SAP production order for {sku1}.")
             order1 = self.sap_create_order(sku1)
 
             self.show_progress("Updating Production Order",
-                                "The bot is changing and printing the production order in SAP.")
+                                "The agent is changing and printing the production order in SAP.")
             self.sap_change_order_and_print(order1)
 
             # ---- Material 2: check stock, review an EXISTING order ----
             self.step(f"\n--- Material 2/2: {sku2} (review existing order) ---")
             self.show_progress(f"Checking Stock for {sku2}",
-                                f"The bot is looking up stock and batch details for material {sku2} in SAP.")
+                                f"The agent is looking up stock and batch details for material {sku2} in SAP.")
             self.sap.current_material = sku2
             self.sap_stock_lookup(sku2)
 
             message2 = self.gemini.compose_reply(sku2, self.sap_data.get_material(sku2), fallback_message=message2)
 
             self.show_progress("Reviewing Material Document",
-                                f"The bot is reviewing the existing production order on file for {sku2} in SAP, "
+                                f"The agent is reviewing the existing production order on file for {sku2} in SAP, "
                                 "checking whether there's another component to look at.")
             self.sap_matdoc_and_display(sku2)
 
             self.show_progress("Sharing Findings on Teams",
-                                "The bot snipped the SAP stock overview and sent it to the team on Teams, "
+                                "The agent snipped the SAP stock overview and sent it to the team on Teams, "
                                 "then read their reply.")
             self.teams_communicate_findings(sku2, message2)
 
             # ---- Spreadsheet updates: once each, for the right material ----
             self.show_progress("Updating Tracker Spreadsheets",
-                                f"The bot is logging {sku1}'s new order in the Production Tracker, flagging "
+                                f"The agent is logging {sku1}'s new order in the Production Tracker, flagging "
                                 f"{sku2}'s status on the Customer Service Alert Board, and checking the Safety "
                                 "Stock Metric sheet.")
             self.excel_update_production_tracker(sku1)
             self.excel_update_csab(sku2)
             self.excel_touch_safety_stock_metric(sku2)
 
-            self.show_progress("Done", "The bot finished processing both materials.")
+            self.show_progress("Done", "The agent finished processing both materials.")
             self.step("=== Stop ===")
             return self.summarize()
         finally:

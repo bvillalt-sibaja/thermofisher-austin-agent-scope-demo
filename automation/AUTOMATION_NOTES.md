@@ -15,10 +15,26 @@ SDK dependency):
    `outgoing_message_2` text.
 
 Both narrate through the Bot Progress window with the same
-loading-spinner + result pattern as the Teams API calls (see "Loading
-spinner" section below) -- e.g. "Calling Gemini / Understanding the Teams
-request..." then "Gemini Responded / Understood the request -- looking up
-A42362."
+loading-spinner pattern as the Teams API calls, PLUS a dedicated
+"analysis result" step showing the model's actual output (not a generic
+filler line) with its own 1.8s pause so it's actually readable: "Calling
+LLM" (spinner) -> **"LLM Analysis"** showing the real model output (the
+one-sentence analysis of the request, or a preview of the composed reply)
+-> "Request Understood" (transitions into the next phase). Generic "LLM"
+wording throughout the visible window on purpose -- internal `step()`/log
+lines still say "Gemini" for accurate diagnostics, that's not user-facing.
+
+**Bug found and fixed while adding the analysis step:** `GeminiClient`
+referenced `self.LOADING_DELAY` (copied from `TeamsApiClient`'s pattern)
+without ever defining it on `GeminiClient` itself -- every real Gemini
+call was silently crashing with `AttributeError` right after a
+successful analysis/compose, landing in the `except` branch and falling
+back to scripted text even though the actual LLM call had succeeded. The
+demo still passed throughout (that's what the fallback is for), but the
+new analysis step never actually displayed until this was fixed. Caught
+by reading `result['log']` after a run, not by watching the window --
+the fallback masked it visually. Fixed by adding `LOADING_DELAY = 1.8` to
+`GeminiClient` directly.
 
 **Fails soft, on purpose.** An empty key, a network error, a non-200, or
 an unexpected response shape all fall back to the scripted SKU/message
